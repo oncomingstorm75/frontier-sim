@@ -727,7 +727,7 @@ if (document.getElementById('customDays')) {
     }
 }
 // Enhanced showModal method in FrontierUI class
-showModal(title, content, options = {}) {
+    showModal(title, content, options = {}) {
     const {
         allowClose = true,
         modalId = 'dynamicModal',
@@ -792,6 +792,7 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = FrontierUI;
 
 }
+
 
 
 
