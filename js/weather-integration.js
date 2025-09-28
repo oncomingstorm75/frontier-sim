@@ -1057,4 +1057,4 @@ if (typeof window.FrontierSimulation !== 'undefined') {
     // Store original methods
     const originalInitializeGameState = window.FrontierSimulation.prototype.initializeGameState;
     const originalSimulationStep = window.FrontierSimulation.prototype.simulationStep;
-    const originalGenerate
+   const originalGenerateEvents = window.FrontierSimulation.prototype.generateEvents;
