@@ -780,7 +780,6 @@ if (document.getElementById('customDays')) {
     bootstrapModal.show();
     return bootstrapModal;
 }
-}
 // Initialize UI when DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
     window.frontierUI = new FrontierUI();
@@ -792,6 +791,7 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = FrontierUI;
 
 }
+
 
 
 
