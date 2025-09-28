@@ -118,7 +118,7 @@ class FrontierUI {
         }
         if (document.getElementById('stepYearBtn')) {
             document.getElementById('stepYearBtn').addEventListener('click', () => {
-                if (this.simulation && !this.simulation.isRunning) {
+                if (this.simulation) {
                     this.advanceWithProgress(365, "Advancing 1 year...");
                 }
             });
@@ -126,7 +126,7 @@ class FrontierUI {
 
         if (document.getElementById('step5YearBtn')) {
             document.getElementById('step5YearBtn').addEventListener('click', () => {
-                if (this.simulation && !this.simulation.isRunning) {
+                if (this.simulation) {
                     this.advanceWithProgress(1825, "Advancing 5 years...");
                 }
             });
@@ -134,7 +134,7 @@ class FrontierUI {
 
         if (document.getElementById('step10YearBtn')) {
             document.getElementById('step10YearBtn').addEventListener('click', () => {
-                if (this.simulation && !this.simulation.isRunning) {
+                if (this.simulation) {
                     this.advanceWithProgress(3650, "Advancing 10 years...");
                 }
             });
@@ -792,3 +792,4 @@ window.addEventListener('DOMContentLoaded', () => {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = FrontierUI;
 }
+
