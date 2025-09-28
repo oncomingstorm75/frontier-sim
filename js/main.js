@@ -1309,66 +1309,155 @@ stepToDay(targetDay) {
         }
     }
 
-    updateResources() {
-        // Resource generation based on character skills and activities
-        let foodProduction = 0;
-        let materialProduction = 0;
-        let moneyGeneration = 0;
+updateResources() {
+    // Resource generation based on character skills and activities
+    let foodProduction = 0;
+    let woodProduction = 0;
+    let stoneProduction = 0;
+    let metalProduction = 0;
+    let toolsProduction = 0;
+    let medicineProduction = 0;
+    let moneyGeneration = 0;
+    
+    this.gameState.characters.forEach(character => {
+        const activity = character.currentActivity || '';
+        const background = character.background || '';
         
-        this.gameState.characters.forEach(character => {
-            // Food production from farmers
-            if (character.background === 'Farmer' || character.currentActivity.includes('farming')) {
-                foodProduction += Math.floor(character.stats.skills.agriculture / 20);
+        // Food production from farmers and hunters
+        if (background === 'Farmer' || activity.includes('farming') || activity.includes('crops')) {
+            foodProduction += Math.floor(character.stats.skills.agriculture / 20);
+        }
+        if (background === 'Hunter' || activity.includes('hunting')) {
+            foodProduction += Math.floor(character.stats.skills.hunting / 25);
+        }
+        
+        // Wood production from loggers and carpenters
+        if (background === 'Carpenter' || activity.includes('woodwork') || activity === 'chopping_wood') {
+            woodProduction += Math.floor(character.stats.skills.construction / 25);
+        }
+        
+        // Stone production from quarrying and stonemasons
+        if (activity === 'quarrying' || background === 'Stonemason' || activity.includes('stonework')) {
+            stoneProduction += Math.floor(character.stats.skills.construction / 30);
+        }
+        
+        // Metal production from mining/prospecting
+        if (background === 'Prospector' || activity.includes('mining') || activity === 'prospecting') {
+            const miningSkill = character.stats.skills.mining || character.stats.skills.survival || 0;
+            const metalFound = Math.floor(miningSkill / 40);
+            if (metalFound > 0 && window.FrontierUtils.Random.chance(0.3)) {
+                metalProduction += metalFound;
             }
-            
-            // Material production from various backgrounds
-            if (character.background === 'Carpenter' || character.currentActivity.includes('construction')) {
-                materialProduction += Math.floor(character.stats.skills.construction / 25);
+        }
+        
+        // Tool production from blacksmiths
+        if (background === 'Blacksmith' || activity.includes('metalwork') || activity === 'tool_making') {
+            if (this.gameState.resources.metal >= 2 && window.FrontierUtils.Random.chance(0.25)) {
+                this.gameState.resources.metal -= 2;
+                toolsProduction += 1;
             }
-            
-            // Money from merchants and services
-            if (character.background === 'Merchant' || character.currentActivity.includes('trading')) {
-                moneyGeneration += Math.floor(character.stats.skills.social / 30);
+        }
+        
+        // Medicine production from doctors and herbalists
+        if (background === 'Doctor' || activity === 'preparing_medicine' || activity.includes('medical')) {
+            const medicalSkill = character.stats.skills.medical || 0;
+            if (medicalSkill > 30 && window.FrontierUtils.Random.chance(0.15)) {
+                medicineProduction += 1;
             }
-            
-            // Mining production
-            if (character.background === 'Prospector' || character.currentActivity.includes('mining')) {
-                const goldFound = Math.floor(character.stats.skills.mining / 40);
-                moneyGeneration += goldFound;
-                if (goldFound > 0 && this.utils.Random.chance(0.1)) {
-                    this.gameState.resources.metal += 1;
+        }
+        
+        // Money from merchants and services
+        if (background === 'Merchant' || activity.includes('trading')) {
+            moneyGeneration += Math.floor(character.stats.skills.social / 30);
+        }
+        if (background === 'Doctor' || background === 'Lawyer' || background === 'Teacher') {
+            moneyGeneration += Math.floor(character.stats.skills.social / 50); // Service fees
+        }
+    });
+    
+    // Apply resource production
+    this.gameState.resources.food += foodProduction;
+    this.gameState.resources.wood += woodProduction;
+    this.gameState.resources.stone += stoneProduction;
+    this.gameState.resources.metal += metalProduction;
+    this.gameState.resources.tools += toolsProduction;
+    this.gameState.resources.medicine += medicineProduction;
+    this.gameState.resources.money += moneyGeneration;
+    
+    // Resource consumption
+    const population = this.gameState.population.total;
+    
+    // Daily consumption
+    const dailyConsumption = {
+        food: population * 2,
+        water: population * 1,
+        wood: Math.floor(population / 2) // Heating/cooking
+    };
+    
+    // Tool wear and consumption
+    const toolConsumption = {
+        'farming': 0.08,
+        'construction': 0.12,
+        'mining': 0.15,
+        'woodworking': 0.08,
+        'metalworking': 0.05,
+        'quarrying': 0.10,
+        'building_construction': 0.20
+    };
+    
+    this.gameState.characters.forEach(character => {
+        const activity = character.currentActivity;
+        const wearRate = toolConsumption[activity];
+        
+        if (wearRate && this.gameState.resources.tools > 0) {
+            if (window.FrontierUtils.Random.chance(wearRate)) {
+                this.gameState.resources.tools = Math.max(0, this.gameState.resources.tools - 1);
+                
+                if (this.gameState.resources.tools === 0) {
+                    character.currentActivity = 'looking_for_tools';
+                    this.logGameEvent(`${character.name}'s tools broke - work halted`);
                 }
             }
-        });
-        
-        // Apply resource changes
-        this.gameState.resources.food += foodProduction;
-        this.gameState.resources.wood += materialProduction;
-        this.gameState.resources.money += moneyGeneration;
-        
-        // Daily consumption
-        const dailyConsumption = {
-            food: this.gameState.population.total * 2,
-            water: this.gameState.population.total * 1,
-            wood: Math.floor(this.gameState.population.total / 2)
-        };
-        
-        Object.keys(dailyConsumption).forEach(resource => {
-            this.gameState.resources[resource] = Math.max(0, 
-                this.gameState.resources[resource] - dailyConsumption[resource]);
-        });
-        
-        // Weather effects on resources
-        if (this.gameState.weather.precipitation === 'heavy_rain') {
-            this.gameState.resources.water += 10;
         }
         
-        if (this.gameState.weather.temperature < -5) {
-            this.gameState.resources.food -= 2; // Spoilage/increased consumption
+        // Stone consumption for construction
+        if ((activity === 'construction' || activity === 'building_construction') && 
+            this.gameState.resources.stone > 0 && window.FrontierUtils.Random.chance(0.08)) {
+            this.gameState.resources.stone -= 1;
         }
         
-        // Update market prices based on supply/demand
-        this.updateMarketPrices();
+        // Wood consumption for construction
+        if ((activity === 'construction' || activity === 'building_construction') && 
+            this.gameState.resources.wood > 0 && window.FrontierUtils.Random.chance(0.15)) {
+            this.gameState.resources.wood -= 1;
+        }
+    });
+    
+    // Apply daily consumption
+    Object.keys(dailyConsumption).forEach(resource => {
+        this.gameState.resources[resource] = Math.max(0, 
+            this.gameState.resources[resource] - dailyConsumption[resource]);
+    });
+    
+    // Weather effects on resources
+    if (this.gameState.weather.precipitation === 'heavy_rain') {
+        this.gameState.resources.water += 10;
+    }
+    
+    if (this.gameState.weather.temperature < -5) {
+        this.gameState.resources.food -= 2; // Spoilage/increased consumption
+        this.gameState.resources.wood -= Math.floor(population / 3); // Extra heating
+    }
+    
+    // Resource scarcity effects
+    this.checkResourceScarcity();
+    
+    // Check for building opportunities
+    this.checkBuildingOpportunities();
+    
+    // Update market prices based on supply/demand
+    this.updateMarketPrices();
+}
     }
 
     updateMarketPrices() {
