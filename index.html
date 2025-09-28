@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Rock Territory - Wild West Frontier Simulation</title>
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Bootstrap for quick styling (optional) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="fas fa-mountain"></i>
+                Red Rock Territory
+            </span>
+            <div class="navbar-text">
+                Wild West Frontier Simulation
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Control Panel Sidebar -->
+            <div class="col-md-3 col-lg-2 bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <!-- Simulation Controls -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6><i class="fas fa-play-circle"></i> Simulation Controls</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button id="startBtn" class="btn btn-success btn-sm">
+                                    <i class="fas fa-play"></i> Start
+                                </button>
+                                <button id="pauseBtn" class="btn btn-warning btn-sm" disabled>
+                                    <i class="fas fa-pause"></i> Pause
+                                </button>
+                                <button id="stopBtn" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-stop"></i> Stop
+                                </button>
+                                <button id="stepBtn" class="btn btn-info btn-sm">
+                                    <i class="fas fa-step-forward"></i> Step
+                                </button>
+                            </div>
+                            <!-- Add this to your control panel in index.html -->
+<hr>
+<div class="mb-3">
+    <label class="form-label">Quick Advance</label>
+    <div class="d-grid gap-2">
+        <button id="stepWeekBtn" class="btn btn-outline-info btn-sm">
+            <i class="fas fa-forward"></i> +7 Days
+        </button>
+        <button id="stepMonthBtn" class="btn btn-outline-info btn-sm">
+            <i class="fas fa-fast-forward"></i> +30 Days
+        </button>
+        <button id="stepSeasonBtn" class="btn btn-outline-info btn-sm">
+            <i class="fas fa-leaf"></i> Next Season
+        </button>
+    </div>
+</div>
+                            <div class="mt-3">
+                                <label for="speedSlider" class="form-label">Speed</label>
+                                <input type="range" id="speedSlider" class="form-range" 
+                                       min="50" max="2000" value="200" step="50">
+                                <small class="text-muted">Current: <span id="speedDisplay">200ms</span></small>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-3">
+                                <button id="resetBtn" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                                <button id="exportBtn" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Panel -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6><i class="fas fa-info-circle"></i> Status</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="statusMessage" class="status-message"></div>
+                            <small class="text-muted" id="simulationStatus">Ready</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard -->
+            <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
+                <!-- Date and Weather Bar -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div class="date-time-info">
+                        <h4 id="currentDate">Loading...</h4>
+                        <span class="badge bg-info me-2" id="currentSeason">Spring</span>
+                        <span class="text-muted">Day <span id="dayCounter">1</span></span>
+                        <div class="progress mt-2" style="height: 6px; width: 200px;">
+                            <div id="yearProgress" class="progress-bar bg-success" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="weather-info">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-thermometer-half me-2"></i>
+                            <span id="temperature">--°F</span>
+                            <i class="fas fa-cloud-rain ms-3 me-2"></i>
+                            <span id="precipitation">none</span>
+                            <i class="fas fa-wind ms-3 me-2"></i>
+                            <span id="windSpeed">0 mph</span>
+                        </div>
+                        <small class="text-muted" id="weatherConditions">Clear</small>
+                    </div>
+                </div>
+
+                <!-- Main Dashboard Grid -->
+                <div class="row">
+                    <!-- Population Panel -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-users"></i> Population</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col">
+                                        <h3 id="totalPopulation">0</h3>
+                                        <small class="text-muted">Total</small>
+                                    </div>
+                                    <div class="col">
+                                        <h6 id="adultsCount">0</h6>
+                                        <small class="text-muted">Adults</small>
+                                    </div>
+                                    <div class="col">
+                                        <h6 id="childrenCount">0</h6>
+                                        <small class="text-muted">Children</small>
+                                    </div>
+                                    <div class="col">
+                                        <h6 id="elderlyCount">0</h6>
+                                        <small class="text-muted">Elderly</small>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div>
+                                    <small class="text-muted">Cultural Groups:</small>
+                                    <div id="cultureBreakdown" class="mt-1">No data</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Morale Panel -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-heart"></i> Morale</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center mb-3">
+                                    <h3 id="overallMorale">50/100</h3>
+                                    <div class="progress">
+                                        <div id="moraleBar" class="progress-bar bg-warning" style="width: 50%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small class="text-muted">Factors:</small>
+                                    <div id="moraleFactors" class="mt-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resources Panel -->
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-boxes"></i> Resources</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small><i class="fas fa-bread-slice"></i> Food:</small>
+                                            <span id="foodLevel">0</span>
+                                        </div>
+                                        <div class="progress" style="height: 4px;">
+                                            <div id="foodBar" class="progress-bar bg-success" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small><i class="fas fa-tint"></i> Water:</small>
+                                            <span id="waterLevel">0</span>
+                                        </div>
+                                        <div class="progress" style="height: 4px;">
+                                            <div id="waterBar" class="progress-bar bg-info" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small><i class="fas fa-tree"></i> Wood:</small>
+                                            <span id="woodLevel">0</span>
+                                        </div>
+                                        <div class="progress" style="height: 4px;">
+                                            <div id="woodBar" class="progress-bar bg-warning" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small><i class="fas fa-cube"></i> Stone:</small>
+                                            <span id="stoneLevel">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small><i class="fas fa-coins"></i> Metal:</small>
+                                            <span id="metalLevel">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small><i class="fas fa-tools"></i> Tools:</small>
+                                            <span id="toolsLevel">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small><i class="fas fa-pills"></i> Medicine:</small>
+                                            <span id="medicineLevel">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small><i class="fas fa-dollar-sign"></i> Money:</small>
+                                            <span id="moneyLevel">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Dashboard Row -->
+                <div class="row">
+                    <!-- Characters Panel -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-user-friends"></i> Characters</h5>
+                                <span class="badge bg-primary" id="characterCount">0</span>
+                            </div>
+                            <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                                <div id="characterList">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-spinner fa-spin"></i> Loading characters...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Events Panel -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-newspaper"></i> Recent Events</h5>
+                                <span class="badge bg-info" id="eventCount">0</span>
+                            </div>
+                            <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                                <div id="eventLog">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-clock"></i> No events yet
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tertiary Dashboard Row -->
+                <div class="row">
+                    <!-- Infrastructure Panel -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-building"></i> Infrastructure</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <h6>Buildings</h6>
+                                    <div id="buildingsList" style="max-height: 150px; overflow-y: auto;">
+                                        <small class="text-muted">No buildings</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6>Defenses</h6>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Defense Level:</span>
+                                        <span id="defensesLevel">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Economy Panel -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-line"></i> Economy</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Wealth Level:</span>
+                                        <span id="wealthLevel">Poor</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Trade Routes:</span>
+                                        <span id="tradeRoutes">0</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6>Market Prices</h6>
+                                    <div id="marketPrices" style="max-height: 120px; overflow-y: auto; font-size: 0.85em;">
+                                        <small class="text-muted">No market data</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chronicle Panel -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-scroll"></i> Chronicle</h5>
+                                <span class="badge bg-secondary" id="chronicleCount">0</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <h6>Latest Entry</h6>
+                                    <div id="recentEvents" class="small text-muted">
+                                        No entries yet
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="showFullChronicle()">
+                                        <i class="fas fa-book-open"></i> View Full Chronicle
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chronicle Modal -->
+    <div class="modal fade" id="chronicleModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-scroll"></i> Red Rock Territory Chronicle
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+                    <div id="chronicleView">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-spinner fa-spin"></i> Loading chronicle...
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="exportChronicleFromModal()">
+                        <i class="fas fa-download"></i> Export Chronicle
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Character Detail Modal -->
+    <div class="modal fade" id="characterModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="characterModalTitle">
+                        <i class="fas fa-user"></i> Character Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="characterModalBody">
+                    <!-- Character details will be populated here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <i class="fas fa-mountain fa-3x text-primary mb-3"></i>
+            <h4>Loading Red Rock Territory</h4>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Preparing your frontier simulation...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Load our simulation scripts in order -->
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/ui.js"></script>
+    <!-- Add these lines after your existing script includes -->
+<script src="js/medical-system.js"></script>
+<script src="js/medical-integration.js"></script>
+    
+    <script>
+        // Global functions for modal interactions
+        function showFullChronicle() {
+            if (window.frontierSim) {
+                const chronicle = window.frontierSim.getChronicle();
+                const chronicleView = document.getElementById('chronicleView');
+                
+                if (chronicle.length === 0) {
+                    chronicleView.innerHTML = '<div class="text-center text-muted">No chronicle entries yet. Start the simulation to begin recording history!</div>';
+                } else {
+                    chronicleView.innerHTML = chronicle.map(entry => `
+                        <div class="chronicle-entry border-bottom pb-2 mb-2">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong>${window.FrontierUtils.DateUtils.formatDate(entry.date)}</strong>
+                                <span class="badge bg-info">${entry.type}</span>
+                            </div>
+                            <p class="mb-1">${entry.description}</p>
+                            ${entry.participants && entry.participants.length > 0 ? 
+                                `<small class="text-muted">Participants: ${entry.participants.join(', ')}</small>` : ''}
+                        </div>
+                    `).join('');
+                }
+                
+                // Update chronicle count
+                document.getElementById('chronicleCount').textContent = chronicle.length;
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('chronicleModal'));
+                modal.show();
+            }
+        }
+
+        function exportChronicleFromModal() {
+            if (window.frontierUI) {
+                window.frontierUI.exportChronicle();
+            }
+        }
+
+        // Initialize simulation when page loads
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('🏔️ Initializing Red Rock Territory simulation...');
+            
+            // Show loading overlay
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            try {
+                // Create simulation instance
+                window.frontierSim = new FrontierSimulation();
+                
+                // Wait for data to load
+                if (window.frontierSim.dataLoadPromise) {
+                    await window.frontierSim.dataLoadPromise;
+                }
+                
+                // Connect UI to simulation
+                if (window.frontierUI) {
+                    window.frontierUI.initialize(window.frontierSim);
+                }
+                
+                console.log('✅ Simulation ready!');
+                
+                // Hide loading overlay
+                document.getElementById('loadingOverlay').style.display = 'none';
+                
+                // Show welcome message
+                if (window.frontierUI) {
+                    window.frontierUI.setStatus('Welcome to Red Rock Territory! Click Start to begin.', 'success');
+                }
+                
+            } catch (error) {
+                console.error('❌ Failed to initialize simulation:', error);
+                
+                // Hide loading overlay and show error
+                document.getElementById('loadingOverlay').style.display = 'none';
+                
+                if (window.frontierUI) {
+                    window.frontierUI.setStatus('Failed to load simulation data. Using fallback mode.', 'warning');
+                }
+            }
+        });
+
+        // Handle window resize for responsive charts
+        window.addEventListener('resize', () => {
+            // You could add chart resizing logic here if needed
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case ' ': // Ctrl+Space to toggle play/pause
+                        e.preventDefault();
+                        if (window.frontierSim) {
+                            if (window.frontierSim.isRunning) {
+                                window.frontierUI.pauseSimulation();
+                            } else {
+                                window.frontierUI.startSimulation();
+                            }
+                        }
+                        break;
+                    case 's': // Ctrl+S to step
+                        e.preventDefault();
+                        if (window.frontierUI && !window.frontierSim.isRunning) {
+                            window.frontierUI.stepSimulation();
+                        }
+                        break;
+                    case 'e': // Ctrl+E to export
+                        e.preventDefault();
+                        if (window.frontierUI) {
+                            window.frontierUI.exportChronicle();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Add escape key handler for modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal.show');
+                openModals.forEach(modal => {
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) modalInstance.hide();
+                });
+            }
+        });
+    </script>
+
+    <style>
+        /* Custom CSS for enhanced styling */
+        .sidebar {
+            min-height: calc(100vh - 56px);
+        }
+        
+        .character-card {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .character-card:hover {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-color: #0d6efd;
+        }
+        
+        .character-card.selected {
+            border-color: #0d6efd;
+            background-color: #f8f9fa;
+        }
+        
+        .character-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .character-name {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .character-age {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        
+        .character-stats .stat-bar {
+            margin-bottom: 0.5rem;
+        }
+        
+        .character-stats .stat-bar:last-child {
+            margin-bottom: 0;
+        }
+        
+        .character-stats label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        
+        .character-stats .progress {
+            height: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .character-traits {
+            font-size: 0.875rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .event-item {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .event-item:hover {
+            background-color: #f8f9fa;
+            border-color: #0d6efd;
+        }
+        
+        .event-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-date {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        
+        .event-description {
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .event-participants {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+        
+        .building-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .building-item:last-child {
+            border-bottom: none;
+        }
+        
+        .building-condition {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 0.25rem 0;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .status-message {
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .status-message.success {
+            background-color: #d1e7dd;
+            color: #0a3622;
+            border: 1px solid #badbcc;
+        }
+        
+        .status-message.warning {
+            background-color: #fff3cd;
+            color: #664d03;
+            border: 1px solid #ffecb5;
+        }
+        
+        .status-message.danger {
+            background-color: #f8d7da;
+            color: #58151c;
+            border: 1px solid #f5c2c7;
+        }
+        
+        .status-message.info {
+            background-color: #d1ecf1;
+            color: #055160;
+            border: 1px solid #b6d4fe;
+        }
+        
+        .chronicle-entry {
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 56px;
+                left: -100%;
+                width: 280px;
+                height: calc(100vh - 56px);
+                transition: left 0.3s ease;
+                z-index: 1000;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+            
+            .character-card {
+                padding: 0.75rem;
+            }
+            
+            .event-item {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</body>
+
+</html>
