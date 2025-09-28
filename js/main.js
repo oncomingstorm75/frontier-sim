@@ -810,6 +810,30 @@ class FrontierSimulation {
     processed = processed.replace(/{child_name}/g, this.getRandomChildName());
     processed = processed.replace(/{gender}/g, window.FrontierUtils.Random.choice(['boy', 'girl']));
     
+    // Handle trade/economic placeholders
+    processed = processed.replace(/{origin_city}/g, window.FrontierUtils.Random.choice(['San Francisco', 'Denver', 'Santa Fe', 'Fort Worth', 'St. Louis']));
+    
+    // Handle profession-specific placeholders
+    processed = processed.replace(/{farmer1}/g, this.getCharacterByProfession('Farmer'));
+    processed = processed.replace(/{farmer2}/g, this.getCharacterByProfession('Farmer'));
+    processed = processed.replace(/{prospector}/g, this.getCharacterByProfession('Prospector'));
+    processed = processed.replace(/{miner}/g, this.getCharacterByProfession(['Prospector', 'Miner']));
+    processed = processed.replace(/{trader}/g, this.getCharacterByProfession('Merchant'));
+    processed = processed.replace(/{doctor}/g, this.getCharacterByProfession('Doctor'));
+    processed = processed.replace(/{preacher}/g, this.getCharacterByProfession('Preacher'));
+    processed = processed.replace(/{sheriff}/g, this.getCharacterByProfession('Sheriff'));
+    processed = processed.replace(/{blacksmith}/g, this.getCharacterByProfession('Blacksmith'));
+    processed = processed.replace(/{hunter}/g, this.getCharacterByProfession('Hunter'));
+    
+    // Handle generic placeholders
+    processed = processed.replace(/{witness}/g, this.getRandomCharacterName());
+    processed = processed.replace(/{helper}/g, this.getRandomCharacterName());
+    processed = processed.replace(/{victim}/g, this.getRandomCharacterName());
+    processed = processed.replace(/{bride}/g, this.getRandomFemaleName());
+    processed = processed.replace(/{groom}/g, this.getRandomMaleName());
+    
+    return processed;
+}
     return processed;
 }
 
@@ -1432,6 +1456,28 @@ getRandomChildName() {
     const gender = window.FrontierUtils.Random.choice(['male', 'female']);
     const culture = this.selectCulture();
     return this.dataLoader.getRandomName(gender, culture);
+}
+getCharacterByProfession(professions) {
+    // Handle both single profession and array of professions
+    const professionList = Array.isArray(professions) ? professions : [professions];
+    
+    const matchingCharacters = this.gameState.characters.filter(c => 
+        professionList.includes(c.background)
+    );
+    
+    if (matchingCharacters.length > 0) {
+        return window.FrontierUtils.Random.choice(matchingCharacters).name;
+    }
+    
+    // Fallback to any character if no matching profession
+    return this.getRandomCharacterName();
+}
+
+getRandomCharacterName() {
+    if (this.gameState.characters.length > 0) {
+        return window.FrontierUtils.Random.choice(this.gameState.characters).name;
+    }
+    return 'a settler';
 }
 }
 
