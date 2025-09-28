@@ -782,22 +782,36 @@ class FrontierSimulation {
         };
     }
 
-    processTemplate(template, participants) {
-        let processed = template;
-        
-        // Replace character placeholders
-        for (let i = 0; i < participants.length; i++) {
-            const placeholder = `{character${i + 1}}`;
-            processed = processed.replace(new RegExp(placeholder, 'g'), participants[i].name);
-        }
-        
-        // Replace other placeholders
-        processed = processed.replace(/{location}/g, this.getRandomLocation());
-        processed = processed.replace(/{weather}/g, this.getWeatherDescription());
-        processed = processed.replace(/{season}/g, this.gameState.season);
-        
-        return processed;
+   processTemplate(template, participants) {
+    let processed = template;
+    
+    // Replace character placeholders
+    for (let i = 0; i < participants.length; i++) {
+        const placeholder = `{character${i + 1}}`;
+        // Fix: get the name from the character object
+        const characterName = participants[i].name || participants[i];
+        processed = processed.replace(new RegExp(placeholder, 'g'), characterName);
     }
+    
+    // Handle single character placeholder
+    if (participants.length > 0) {
+        const characterName = participants[0].name || participants[0];
+        processed = processed.replace(/{character}/g, characterName);
+    }
+    
+    // Replace other placeholders
+    processed = processed.replace(/{location}/g, this.getRandomLocation());
+    processed = processed.replace(/{weather}/g, this.getWeatherDescription());
+    processed = processed.replace(/{season}/g, this.gameState.season);
+    
+    // Handle birth-specific placeholders
+    processed = processed.replace(/{mother}/g, this.getRandomFemaleName());
+    processed = processed.replace(/{father}/g, this.getRandomMaleName());
+    processed = processed.replace(/{child_name}/g, this.getRandomChildName());
+    processed = processed.replace(/{gender}/g, window.FrontierUtils.Random.choice(['boy', 'girl']));
+    
+    return processed;
+}
 
     selectEventParticipants(count = 1) {
         const availableCharacters = this.gameState.characters.filter(char => 
