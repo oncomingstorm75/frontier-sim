@@ -167,6 +167,45 @@ class AdvancedWeatherSystem {
             }
         };
     }
+    calculateDerivedConditions(weather) {
+    // Calculate visibility based on precipitation and conditions
+    let visibility = 1.0;
+    
+    if (weather.precipitation !== 'none') {
+        visibility -= weather.precipitationIntensity * 0.4;
+    }
+    
+    if (weather.conditions.includes('dust_storm')) {
+        visibility = 0.2;
+    }
+    
+    if (weather.conditions.includes('blizzard')) {
+        visibility = 0.1;
+    }
+    
+    if (weather.conditions.includes('fog')) {
+        visibility = 0.3;
+    }
+    
+    weather.visibility = Math.max(0.05, Math.min(1.0, visibility));
+    
+    // Add hazard conditions based on weather severity
+    if (weather.temperature < -10) {
+        weather.hazards.push('extreme_cold');
+    }
+    
+    if (weather.temperature > 35) {
+        weather.hazards.push('extreme_heat');
+    }
+    
+    if (weather.windSpeed > 40) {
+        weather.hazards.push('dangerous_winds');
+    }
+    
+    if (weather.precipitationIntensity > 0.8) {
+        weather.hazards.push('severe_precipitation');
+    }
+}
 
     initializeWeatherPatterns() {
         // Track weather patterns and cycles
