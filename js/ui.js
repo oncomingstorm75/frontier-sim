@@ -707,60 +707,60 @@ if (document.getElementById('stepSeasonBtn')) {
         this.elements = {};
     }
 }
-// Add to FrontierUI class
-advanceWithProgress(days, title) {
-    // Show progress modal
-    const modalContent = `
-        <div class="text-center">
-            <h5>${title}</h5>
-            <div class="progress mb-3">
-                <div id="advanceProgress" class="progress-bar" style="width: 0%"></div>
+// Enhanced showModal method in FrontierUI class
+showModal(title, content, options = {}) {
+    const {
+        allowClose = true,
+        modalId = 'dynamicModal',
+        size = 'modal-lg',
+        backdrop = true,
+        keyboard = true
+    } = options;
+    
+    // Create or get existing modal
+    let modal = document.getElementById(modalId);
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = modalId;
+        modal.className = 'modal fade';
+        modal.innerHTML = `
+            <div class="modal-dialog ${size}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="${modalId}Title"></h5>
+                        ${allowClose ? '<button type="button" class="btn-close" data-bs-dismiss="modal"></button>' : ''}
+                    </div>
+                    <div class="modal-body" id="${modalId}Body"></div>
+                    <div class="modal-footer" id="${modalId}Footer" style="display: none;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
-            <p id="advanceStatus">Starting simulation...</p>
-            <small id="advanceDetails" class="text-muted">Day 0 of ${days}</small>
-        </div>
-    `;
+        `;
+        document.body.appendChild(modal);
+    }
     
-    this.showModal(title, modalContent);
+    // Update modal content
+    document.getElementById(`${modalId}Title`).textContent = title;
+    document.getElementById(`${modalId}Body`).innerHTML = content;
     
-    // Advance in chunks to show progress
-    let currentDay = 0;
-    const chunkSize = Math.min(30, Math.max(1, Math.floor(days / 50))); // Adaptive chunk size
+    // Show/hide footer
+    const footer = document.getElementById(`${modalId}Footer`);
+    if (allowClose) {
+        footer.style.display = 'flex';
+    } else {
+        footer.style.display = 'none';
+    }
     
-    const advanceChunk = () => {
-        const remaining = days - currentDay;
-        const thisChunk = Math.min(chunkSize, remaining);
-        
-        // Advance simulation
-        this.simulation.stepDays(thisChunk);
-        currentDay += thisChunk;
-        
-        // Update progress
-        const percentage = (currentDay / days) * 100;
-        document.getElementById('advanceProgress').style.width = `${percentage}%`;
-        document.getElementById('advanceStatus').textContent = 
-            `${Math.round(percentage)}% Complete`;
-        document.getElementById('advanceDetails').textContent = 
-            `Day ${currentDay} of ${days} - ${this.simulation.gameState.date.getFullYear()}`;
-        
-        if (currentDay < days) {
-            // Continue advancing
-            setTimeout(advanceChunk, 10); // Small delay to show progress
-        } else {
-            // Finished
-            document.getElementById('advanceStatus').textContent = "Complete!";
-            this.updateDisplay();
-            
-            // Auto-close modal after 2 seconds
-            setTimeout(() => {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('medicalModal'));
-                if (modal) modal.hide();
-            }, 2000);
-        }
-    };
+    // Configure modal options
+    const bootstrapModal = new bootstrap.Modal(modal, {
+        backdrop: backdrop,
+        keyboard: keyboard
+    });
     
-    // Start advancing
-    setTimeout(advanceChunk, 100);
+    bootstrapModal.show();
+    return bootstrapModal;
+}
 }
 // Initialize UI when DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
@@ -773,4 +773,5 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = FrontierUI;
 
 }
+
 
