@@ -158,6 +158,108 @@ if (typeof window.FrontierSimulation !== 'undefined') {
             }
         ];
         
+        const discovery = window.FrontierUtils.Random.choice(discoveries);
+        const character = window.FrontierUtils.Random.choice(this.gameState.characters);
+        
+        // Process template
+        let description = discovery.description
+            .replace('{character}', character.name)
+            .replace('{herb}', window.FrontierUtils.Random.choice(['willow bark', 'echinacea', 'sage', 'mint']))
+            .replace('{condition}', window.FrontierUtils.Random.choice(['fever', 'pain', 'infection', 'digestive issues']));
+        
+        return {
+            id: `medical_discovery_${Date.now()}`,
+            type: 'discovery',
+            description: description,
+            participants: [character],
+            effects: [discovery.effect],
+            severity: 4,
+            date: new Date(this.gameState.date)
+        };
+    };
+
+    // Generate accident events
+    window.FrontierSimulation.prototype.generateAccidentEvent = function() {
+        const accidents = [
+            {
+                cause: 'mining_accident',
+                description: 'A cave-in at the mine trapped {character}, causing severe injuries',
+                injuryTypes: ['crush', 'fracture', 'cut'],
+                severity: 1.2
+            },
+            {
+                cause: 'construction_accident',
+                description: '{character} fell from scaffolding while building {building}',
+                injuryTypes: ['fracture', 'bruise', 'cut'],
+                severity: 1.0
+            },
+            {
+                cause: 'animal_attack',
+                description: '{character} was attacked by a {animal} while {activity}',
+                injuryTypes: ['laceration', 'puncture', 'bruise'],
+                severity: 1.1
+            },
+            {
+                cause: 'fire_accident',
+                description: 'A fire broke out in {location}, injuring {character}',
+                injuryTypes: ['burn', 'cut', 'bruise'],
+                severity: 1.3
+            }
+        ];
+        
+        const accident = window.FrontierUtils.Random.choice(accidents);
+        const character = window.FrontierUtils.Random.choice(this.gameState.characters);
+        
+        // Generate injury
+        const injuryType = window.FrontierUtils.Random.choice(accident.injuryTypes);
+        const injury = this.medicalSystem.generateRandomInjury(character, accident.cause);
+        
+        // Process template
+        let description = accident.description
+            .replace('{character}', character.name)
+            .replace('{building}', window.FrontierUtils.Random.choice(['the church', 'a new house', 'the trading post']))
+            .replace('{animal}', window.FrontierUtils.Random.choice(['bear', 'wolf', 'wild boar', 'rattlesnake']))
+            .replace('{activity}', window.FrontierUtils.Random.choice(['hunting', 'gathering firewood', 'checking traps']))
+            .replace('{location}', window.FrontierUtils.Random.choice(['the blacksmith shop', 'the kitchen', 'the barn']));
+        
+        return {
+            id: `accident_${Date.now()}`,
+            type: 'accident',
+            description: description,
+            participants: [character],
+            effects: [
+                { type: 'character_injury', character: character.id, injury: injury.id },
+                { type: 'community_mood', value: -5 }
+            ],
+            severity: Math.floor(accident.severity * 5),
+            date: new Date(this.gameState.date)
+        };
+    };
+
+    // Generate medical supply events
+    window.FrontierSimulation.prototype.generateMedicalSupplyEvent = function() {
+        const supplyEvents = [
+            {
+                type: 'caravan_arrival',
+                description: 'A medicine wagon arrived with supplies from {city}',
+                medicineGain: window.FrontierUtils.Random.int(10, 25),
+                cost: window.FrontierUtils.Random.int(20, 50)
+            },
+            {
+                type: 'supply_shortage',
+                description: 'Medical supplies are running dangerously low in the settlement',
+                medicineGain: 0,
+                cost: 0
+            },
+            {
+                type: 'snake_oil_salesman',
+                description: 'A traveling salesman claims to have miracle cures',
+                medicineGain: window.FrontierUtils.Random.int(5, 15),
+                cost: window.FrontierUtils.Random.int(30, 60),
+                effectiveness: 0.3 // Snake oil is not very effective
+            }
+        ];
+        
         const supplyEvent = window.FrontierUtils.Random.choice(supplyEvents);
         
         // Process template
@@ -687,104 +789,3 @@ const medicalStyles = `
 
 // Inject medical styles
 document.head.insertAdjacentHTML('beforeend', medicalStyles);
-        const discovery = window.FrontierUtils.Random.choice(discoveries);
-        const character = window.FrontierUtils.Random.choice(this.gameState.characters);
-        
-        // Process template
-        let description = discovery.description
-            .replace('{character}', character.name)
-            .replace('{herb}', window.FrontierUtils.Random.choice(['willow bark', 'echinacea', 'sage', 'mint']))
-            .replace('{condition}', window.FrontierUtils.Random.choice(['fever', 'pain', 'infection', 'digestive issues']));
-        
-        return {
-            id: `medical_discovery_${Date.now()}`,
-            type: 'discovery',
-            description: description,
-            participants: [character],
-            effects: [discovery.effect],
-            severity: 4,
-            date: new Date(this.gameState.date)
-        };
-    };
-
-    // Generate accident events
-    window.FrontierSimulation.prototype.generateAccidentEvent = function() {
-        const accidents = [
-            {
-                cause: 'mining_accident',
-                description: 'A cave-in at the mine trapped {character}, causing severe injuries',
-                injuryTypes: ['crush', 'fracture', 'cut'],
-                severity: 1.2
-            },
-            {
-                cause: 'construction_accident',
-                description: '{character} fell from scaffolding while building {building}',
-                injuryTypes: ['fracture', 'bruise', 'cut'],
-                severity: 1.0
-            },
-            {
-                cause: 'animal_attack',
-                description: '{character} was attacked by a {animal} while {activity}',
-                injuryTypes: ['laceration', 'puncture', 'bruise'],
-                severity: 1.1
-            },
-            {
-                cause: 'fire_accident',
-                description: 'A fire broke out in {location}, injuring {character}',
-                injuryTypes: ['burn', 'cut', 'bruise'],
-                severity: 1.3
-            }
-        ];
-        
-        const accident = window.FrontierUtils.Random.choice(accidents);
-        const character = window.FrontierUtils.Random.choice(this.gameState.characters);
-        
-        // Generate injury
-        const injuryType = window.FrontierUtils.Random.choice(accident.injuryTypes);
-        const injury = this.medicalSystem.generateRandomInjury(character, accident.cause);
-        
-        // Process template
-        let description = accident.description
-            .replace('{character}', character.name)
-            .replace('{building}', window.FrontierUtils.Random.choice(['the church', 'a new house', 'the trading post']))
-            .replace('{animal}', window.FrontierUtils.Random.choice(['bear', 'wolf', 'wild boar', 'rattlesnake']))
-            .replace('{activity}', window.FrontierUtils.Random.choice(['hunting', 'gathering firewood', 'checking traps']))
-            .replace('{location}', window.FrontierUtils.Random.choice(['the blacksmith shop', 'the kitchen', 'the barn']));
-        
-        return {
-            id: `accident_${Date.now()}`,
-            type: 'accident',
-            description: description,
-            participants: [character],
-            effects: [
-                { type: 'character_injury', character: character.id, injury: injury.id },
-                { type: 'community_mood', value: -5 }
-            ],
-            severity: Math.floor(accident.severity * 5),
-            date: new Date(this.gameState.date)
-        };
-    };
-
-    // Generate medical supply events
-    window.FrontierSimulation.prototype.generateMedicalSupplyEvent = function() {
-        const supplyEvents = [
-            {
-                type: 'caravan_arrival',
-                description: 'A medicine wagon arrived with supplies from {city}',
-                medicineGain: window.FrontierUtils.Random.int(10, 25),
-                cost: window.FrontierUtils.Random.int(20, 50)
-            },
-            {
-                type: 'supply_shortage',
-                description: 'Medical supplies are running dangerously low in the settlement',
-                medicineGain: 0,
-                cost: 0
-            },
-            {
-                type: 'snake_oil_salesman',
-                description: 'A traveling salesman claims to have miracle cures',
-                medicineGain: window.FrontierUtils.Random.int(5, 15),
-                cost: window.FrontierUtils.Random.int(30, 60),
-                effectiveness: 0.3 // Snake oil is not very effective
-            }
-        ];
