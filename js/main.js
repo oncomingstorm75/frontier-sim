@@ -443,9 +443,6 @@ class FrontierSimulation {
             'Trapper': ['setting traps', 'hunting game', 'processing pelts'],
             'Scout': ['scouting routes', 'gathering intelligence', 'guiding travelers'],
             'Teacher': ['teaching children', 'preparing lessons', 'community lectures']
-            // Add these activities to the background activities mapping:
-
-        const backgroundActivities = {
             'Farmer': ['farming', 'tending crops', 'preparing soil', 'harvesting'],
             'Prospector': ['mining', 'prospecting', 'panning gold', 'exploring'],
             'Merchant': ['trading', 'negotiating', 'inventory management', 'customer relations'],
