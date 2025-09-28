@@ -1048,13 +1048,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1500);
 });
 
-// Inject weather styles
-document.head.insertAdjacentHTML('beforeend', weatherStyles);// weather-integration.js - Integration for Advanced Weather System
+// ... [all previous code remains unchanged, just remove everything after this line below] ...
 
-// Extend the existing FrontierSimulation class with advanced weather
-if (typeof window.FrontierSimulation !== 'undefined') {
-    
-    // Store original methods
-    const originalInitializeGameState = window.FrontierSimulation.prototype.initializeGameState;
-    const originalSimulationStep = window.FrontierSimulation.prototype.simulationStep;
-   const originalGenerateEvents = window.FrontierSimulation.prototype.generateEvents;
+// Inject weather styles
+document.head.insertAdjacentHTML('beforeend', weatherStyles);
+
+// Auto-initialize weather panels when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Add weather forecast panel when UI is ready
+    setTimeout(() => {
+        if (window.frontierUI && window.frontierUI.addWeatherForecastPanel) {
+            window.frontierUI.addWeatherForecastPanel();
+        }
+    }, 1500);
+});
