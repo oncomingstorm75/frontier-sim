@@ -335,17 +335,18 @@ class FrontierSimulation {
             
             characters: this.generateInitialCharacters(),
             
+            // Add initial basic resources for first shelter
             resources: {
                 food: 100,
                 water: 100,
-                wood: 50,
-                stone: 25,
-                metal: 10,
+                wood: 30,  // Enough for first shelter
+                stone: 5,  // Minimal starting stone
+                metal: 2,  // Very little metal initially
                 medicine: 20,
                 ammunition: 15,
-                tools: 30,
-                money: 200
-            },
+                tools: 5,  // Few tools to start
+                money: 50  // Less money initially
+        },
             
             infrastructure: {
                 buildings: [], // START WITH NO BUILDINGS!
