@@ -831,6 +831,31 @@ class FrontierSimulation {
     processed = processed.replace(/{victim}/g, this.getRandomCharacterName());
     processed = processed.replace(/{bride}/g, this.getRandomFemaleName());
     processed = processed.replace(/{groom}/g, this.getRandomMaleName());
+
+    // Add these lines to your processTemplate method in main.js:
+
+    // Handle water rights placeholders
+    processed = processed.replace(/{upstream_user}/g, this.getRandomCharacterName());
+    processed = processed.replace(/{downstream_user}/g, this.getRandomCharacterName());
+
+    // Handle dispute placeholders  
+    processed = processed.replace(/{dispute_cause}/g, window.FrontierUtils.Random.choice(['land boundaries', 'water rights', 'livestock', 'business dealings', 'family honor']));
+    processed = processed.replace(/{accusation}/g, window.FrontierUtils.Random.choice(['cheating at cards', 'claim jumping', 'cattle rustling', 'courting their daughter', 'spreading lies']));
+
+    // Handle bandit placeholders
+    processed = processed.replace(/{bandit_leader}/g, window.FrontierUtils.Random.choice(['Black Pete', 'Iron Annie', 'Snake Eyes McGraw', 'Scarred Jack', 'The Phantom Rider']));
+    processed = processed.replace(/{destination}/g, window.FrontierUtils.Random.choice(['Santa Fe', 'Denver', 'the trading post', 'the mine', 'the next settlement']));
+    processed = processed.replace(/{traveler}/g, this.getRandomCharacterName());
+
+    // Handle other missing placeholders
+    processed = processed.replace(/{midwife}/g, this.getCharacterByProfession(['Doctor', 'Teacher']) || this.getRandomFemaleName());
+    processed = processed.replace(/{illness}/g, window.FrontierUtils.Random.choice(['fever', 'consumption', 'dysentery', 'influenza']));
+    processed = processed.replace(/{brave_explorer}/g, this.getRandomCharacterName());
+    processed = processed.replace(/{settler}/g, this.getRandomCharacterName());
+    processed = processed.replace(/{sacred_site}/g, window.FrontierUtils.Random.choice(['ancient burial ground', 'sacred spring', 'spiritual cave', 'ceremonial circle']));
+    processed = processed.replace(/{legendary_creature}/g, window.FrontierUtils.Random.choice(['Windigo', 'Thunderbird', 'Desert Spirit', 'Canyon Ghost', 'Shadow Walker']));
+    processed = processed.replace(/{inventor}/g, this.getRandomCharacterName());
+    processed = processed.replace(/{purpose}/g, window.FrontierUtils.Random.choice(['mining efficiency', 'water pumping', 'grain processing', 'construction aid', 'transportation']));
     
     return processed;
 }
