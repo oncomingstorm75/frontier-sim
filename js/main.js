@@ -834,8 +834,6 @@ class FrontierSimulation {
     
     return processed;
 }
-    return processed;
-}
 
     selectEventParticipants(count = 1) {
         const availableCharacters = this.gameState.characters.filter(char => 
