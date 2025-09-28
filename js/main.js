@@ -445,7 +445,6 @@ class FrontierSimulation {
     'Teacher': ['teaching children', 'preparing lessons', 'community lectures'],
     'Stonemason': ['quarrying', 'stonework', 'construction', 'masonry']
     // ... add more if needed
-};
         };
         
         const activities = backgroundActivities[background.name] || ['general work', 'community tasks'];
