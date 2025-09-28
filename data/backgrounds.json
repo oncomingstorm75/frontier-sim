@@ -1,0 +1,474 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Character backgrounds and professions for Wild West frontier simulation",
+    "era": "1840-1890",
+    "region": "American Frontier"
+  },
+
+  "backgrounds": {
+    "agricultural": {
+      "farmer": {
+        "name": "Farmer",
+        "description": "Works the land to feed the growing settlement",
+        "rarity": "common",
+        "base_skills": {
+          "agriculture": 80,
+          "construction": 60,
+          "hunting": 40,
+          "social": 50,
+          "medical": 30,
+          "leadership": 45,
+          "trading": 35,
+          "survival": 55
+        },
+        "mood_modifier": 0.1,
+        "starting_resources": ["seeds", "farming_tools", "preserved_food"],
+        "daily_activities": ["tending_crops", "feeding_livestock", "maintaining_equipment"],
+        "seasonal_bonuses": {
+          "spring": {"agriculture": 15, "mood": 5},
+          "summer": {"agriculture": 10, "survival": 5},
+          "fall": {"agriculture": 20, "trading": 10},
+          "winter": {"construction": 10, "social": 5}
+        },
+        "background_story_templates": [
+          "Left the eastern farmlands seeking better soil and opportunity",
+          "Inherited farming knowledge from generations of agricultural families",
+          "Fled crop failures and debt to start fresh on the frontier",
+          "Drawn west by promises of fertile valley land"
+        ]
+      },
+      "rancher": {
+        "name": "Rancher",
+        "description": "Raises cattle and horses on the open range",
+        "rarity": "common",
+        "base_skills": {
+          "agriculture": 60,
+          "hunting": 70,
+          "survival": 75,
+          "leadership": 60,
+          "trading": 50,
+          "construction": 45,
+          "social": 40,
+          "medical": 25
+        },
+        "mood_modifier": 0.05,
+        "starting_resources": ["livestock", "saddle", "rope", "branding_iron"],
+        "daily_activities": ["herding_cattle", "maintaining_fences", "breaking_horses"],
+        "special_abilities": ["animal_handling", "open_range_navigation", "weather_prediction"]
+      }
+    },
+
+    "crafting": {
+      "blacksmith": {
+        "name": "Blacksmith",
+        "description": "Forges tools and repairs equipment essential to frontier life",
+        "rarity": "uncommon",
+        "base_skills": {
+          "metalwork": 90,
+          "construction": 70,
+          "agriculture": 30,
+          "trading": 55,
+          "leadership": 50,
+          "social": 45,
+          "medical": 35,
+          "survival": 40
+        },
+        "mood_modifier": 0.05,
+        "starting_resources": ["hammer", "anvil", "metal_scraps", "forge_tools"],
+        "daily_activities": ["forging_tools", "shoeing_horses", "repairing_equipment"],
+        "special_services": ["weapon_repair", "tool_creation", "metal_recycling"],
+        "economic_impact": "high"
+      },
+      "carpenter": {
+        "name": "Carpenter",
+        "description": "Builds the structures that transform wilderness into civilization",
+        "rarity": "uncommon",
+        "base_skills": {
+          "construction": 90,
+          "agriculture": 45,
+          "trading": 50,
+          "leadership": 55,
+          "social": 50,
+          "survival": 45,
+          "medical": 30,
+          "metalwork": 40
+        },
+        "mood_modifier": 0.08,
+        "starting_resources": ["saw", "hammer", "nails", "measuring_tools"],
+        "daily_activities": ["building_construction", "furniture_making", "repair_work"],
+        "special_services": ["house_building", "furniture_crafting", "structural_repair"]
+      }
+    },
+
+    "commerce": {
+      "merchant": {
+        "name": "Merchant",
+        "description": "Facilitates trade and brings distant goods to the frontier",
+        "rarity": "uncommon",
+        "base_skills": {
+          "trading": 90,
+          "social": 75,
+          "mathematics": 60,
+          "leadership": 50,
+          "survival": 40,
+          "agriculture": 25,
+          "construction": 30,
+          "medical": 35
+        },
+        "mood_modifier": 0.1,
+        "starting_resources": ["coin_purse", "trade_goods", "ledger", "scales"],
+        "daily_activities": ["negotiating_deals", "inventory_management", "customer_service"],
+        "special_abilities": ["price_evaluation", "supply_chain_knowledge", "credit_systems"],
+        "economic_impact": "very_high"
+      },
+      "banker": {
+        "name": "Banker",
+        "description": "Manages finances and provides credit for frontier development",
+        "rarity": "rare",
+        "base_skills": {
+          "mathematics": 85,
+          "trading": 70,
+          "social": 60,
+          "leadership": 65,
+          "agriculture": 20,
+          "construction": 25,
+          "survival": 30,
+          "medical": 25
+        },
+        "mood_modifier": 0.05,
+        "starting_resources": ["strongbox", "ledgers", "currency", "legal_documents"],
+        "special_services": ["loans", "savings", "investment", "currency_exchange"],
+        "requirements": {"population_minimum": 100, "economic_stability": "medium"}
+      }
+    },
+
+    "professional": {
+      "doctor": {
+        "name": "Doctor",
+        "description": "Provides medical care in a land where help is far away",
+        "rarity": "rare",
+        "base_skills": {
+          "medical": 90,
+          "social": 65,
+          "leadership": 60,
+          "survival": 45,
+          "agriculture": 30,
+          "trading": 40,
+          "construction": 25,
+          "chemistry": 70
+        },
+        "mood_modifier": 0.2,
+        "starting_resources": ["medical_bag", "medicines", "surgical_tools", "medical_books"],
+        "daily_activities": ["treating_patients", "preparing_medicines", "health_education"],
+        "special_abilities": ["disease_diagnosis", "surgery", "epidemic_control", "childbirth"],
+        "community_impact": "critical"
+      },
+      "teacher": {
+        "name": "Teacher",
+        "description": "Educates the next generation and preserves knowledge",
+        "rarity": "uncommon",
+        "base_skills": {
+          "social": 80,
+          "leadership": 70,
+          "mathematics": 75,
+          "agriculture": 40,
+          "medical": 45,
+          "trading": 35,
+          "construction": 30,
+          "survival": 35
+        },
+        "mood_modifier": 0.15,
+        "starting_resources": ["books", "writing_supplies", "slate", "teaching_materials"],
+        "daily_activities": ["teaching_children", "preparing_lessons", "community_lectures"],
+        "special_services": ["literacy_training", "record_keeping", "correspondence"],
+        "requirements": {"population_minimum": 50, "children_present": true}
+      },
+      "lawyer": {
+        "name": "Lawyer",
+        "description": "Brings law and order to the frontier through legal expertise",
+        "rarity": "rare",
+        "base_skills": {
+          "social": 85,
+          "leadership": 80,
+          "mathematics": 60,
+          "trading": 65,
+          "agriculture": 20,
+          "construction": 25,
+          "survival": 35,
+          "medical": 30
+        },
+        "mood_modifier": 0.1,
+        "starting_resources": ["law_books", "legal_documents", "writing_supplies", "formal_attire"],
+        "special_services": ["legal_representation", "contract_drafting", "dispute_resolution"],
+        "requirements": {"population_minimum": 150, "legal_disputes": true}
+      }
+    },
+
+    "religious": {
+      "preacher": {
+        "name": "Preacher",
+        "description": "Provides spiritual guidance and moral leadership",
+        "rarity": "uncommon",
+        "base_skills": {
+          "social": 90,
+          "leadership": 75,
+          "medical": 40,
+          "agriculture": 35,
+          "construction": 40,
+          "survival": 45,
+          "trading": 30,
+          "education": 70
+        },
+        "mood_modifier": 0.25,
+        "starting_resources": ["bible", "hymnal", "writing_supplies", "vestments"],
+        "daily_activities": ["conducting_services", "counseling_settlers", "visiting_sick"],
+        "special_services": ["marriages", "funerals", "baptisms", "moral_guidance"],
+        "community_effects": ["increased_cooperation", "moral_stability", "conflict_resolution"]
+      },
+      "missionary": {
+        "name": "Missionary",
+        "description": "Spreads faith while serving the frontier community",
+        "rarity": "rare",
+        "base_skills": {
+          "social": 85,
+          "medical": 60,
+          "survival": 65,
+          "leadership": 70,
+          "agriculture": 45,
+          "construction": 50,
+          "trading": 35,
+          "education": 75
+        },
+        "mood_modifier": 0.2,
+        "starting_resources": ["religious_texts", "medical_supplies", "teaching_materials"],
+        "special_abilities": ["cultural_bridge", "language_skills", "diplomatic_immunity"]
+      }
+    },
+
+    "frontier": {
+      "prospector": {
+        "name": "Prospector",
+        "description": "Searches for precious metals and mineral wealth",
+        "rarity": "common",
+        "base_skills": {
+          "mining": 85,
+          "geology": 70,
+          "survival": 65,
+          "agriculture": 30,
+          "construction": 45,
+          "trading": 55,
+          "social": 40,
+          "medical": 25
+        },
+        "mood_modifier": -0.05,
+        "starting_resources": ["pickaxe", "pan", "sample_bags", "camping_gear"],
+        "daily_activities": ["prospecting", "sample_testing", "claim_staking"],
+        "special_abilities": ["mineral_identification", "geological_survey", "claim_registration"],
+        "economic_potential": "very_high",
+        "risk_factor": "high"
+      },
+      "trapper": {
+        "name": "Trapper",
+        "description": "Lives off the land hunting and trapping for survival",
+        "rarity": "uncommon",
+        "base_skills": {
+          "hunting": 90,
+          "survival": 85,
+          "tracking": 80,
+          "trading": 60,
+          "social": 30,
+          "agriculture": 25,
+          "construction": 40,
+          "medical": 45
+        },
+        "mood_modifier": 0.0,
+        "starting_resources": ["traps", "rifle", "ammunition", "pelts"],
+        "daily_activities": ["setting_traps", "hunting_game", "processing_pelts"],
+        "special_abilities": ["wilderness_navigation", "animal_behavior", "weather_reading"],
+        "lifestyle": "nomadic"
+      },
+      "scout": {
+        "name": "Scout",
+        "description": "Guides travelers and provides intelligence about the frontier",
+        "rarity": "uncommon",
+        "base_skills": {
+          "survival": 85,
+          "tracking": 90,
+          "hunting": 75,
+          "leadership": 65,
+          "social": 60,
+          "navigation": 90,
+          "agriculture": 35,
+          "medical": 50
+        },
+        "mood_modifier": 0.1,
+        "starting_resources": ["compass", "maps", "survival_gear", "horse"],
+        "special_abilities": ["route_finding", "danger_assessment", "tribal_relations"],
+        "services": ["expedition_guide", "mail_delivery", "intelligence_gathering"]
+      }
+    },
+
+    "law_enforcement": {
+      "sheriff": {
+        "name": "Sheriff",
+        "description": "Maintains law and order in the growing settlement",
+        "rarity": "rare",
+        "base_skills": {
+          "leadership": 85,
+          "social": 70,
+          "gunfighting": 80,
+          "survival": 60,
+          "tracking": 65,
+          "trading": 45,
+          "agriculture": 30,
+          "medical": 40
+        },
+        "mood_modifier": 0.15,
+        "starting_resources": ["badge", "revolver", "handcuffs", "legal_documents"],
+        "special_authorities": ["arrest_power", "investigation", "court_proceedings"],
+        "requirements": {"population_minimum": 100, "elected_position": true}
+      },
+      "marshal": {
+        "name": "U.S. Marshal",
+        "description": "Federal law enforcement officer with wide-ranging authority",
+        "rarity": "very_rare",
+        "base_skills": {
+          "leadership": 90,
+          "gunfighting": 85,
+          "tracking": 80,
+          "social": 65,
+          "survival": 70,
+          "investigation": 85,
+          "legal_knowledge": 70,
+          "horsemanship": 75
+        },
+        "mood_modifier": 0.2,
+        "starting_resources": ["federal_badge", "quality_firearms", "legal_authority", "horse"],
+        "special_authorities": ["federal_jurisdiction", "interstate_pursuit", "territorial_law"],
+        "appointment_source": "federal_government"
+      }
+    },
+
+    "entertainment": {
+      "saloon_keeper": {
+        "name": "Saloon Keeper",
+        "description": "Provides entertainment, drink, and social gathering place",
+        "rarity": "uncommon",
+        "base_skills": {
+          "social": 85,
+          "trading": 70,
+          "leadership": 60,
+          "entertainment": 75,
+          "agriculture": 25,
+          "construction": 45,
+          "medical": 35,
+          "conflict_resolution": 65
+        },
+        "mood_modifier": 0.1,
+        "starting_resources": ["liquor_stock", "gaming_equipment", "musical_instruments"],
+        "special_services": ["information_hub", "entertainment", "informal_banking"],
+        "community_effects": ["social_gathering", "news_distribution", "conflict_potential"]
+      },
+      "entertainer": {
+        "name": "Entertainer",
+        "description": "Brings music, stories, and joy to frontier life",
+        "rarity": "rare",
+        "base_skills": {
+          "entertainment": 90,
+          "social": 80,
+          "trading": 45,
+          "survival": 40,
+          "leadership": 50,
+          "agriculture": 20,
+          "construction": 25,
+          "medical": 30
+        },
+        "mood_modifier": 0.3,
+        "starting_resources": ["musical_instruments", "costumes", "performance_materials"],
+        "special_abilities": ["morale_boost", "cultural_preservation", "news_spreading"],
+        "lifestyle": "traveling"
+      }
+    }
+  },
+
+  "background_modifiers": {
+    "skill_progression": {
+      "fast_learners": ["teacher", "doctor", "lawyer"],
+      "specialists": ["blacksmith", "prospector", "marshal"],
+      "generalists": ["farmer", "preacher", "scout"]
+    },
+    
+    "social_dynamics": {
+      "leadership_roles": ["sheriff", "preacher", "teacher", "marshal"],
+      "economic_drivers": ["merchant", "banker", "blacksmith"],
+      "community_stabilizers": ["doctor", "preacher", "teacher"],
+      "conflict_sources": ["prospector", "saloon_keeper", "entertainer"]
+    },
+
+    "historical_accuracy": {
+      "common_1849": ["farmer", "prospector", "trapper", "blacksmith"],
+      "emerging_1850s": ["merchant", "preacher", "carpenter"],
+      "established_1860s": ["teacher", "doctor", "sheriff", "banker"],
+      "developed_1870s": ["lawyer", "marshal", "entertainer"]
+    }
+  },
+
+  "background_relationships": {
+    "natural_allies": {
+      "farmer": ["rancher", "blacksmith", "merchant"],
+      "doctor": ["preacher", "teacher", "sheriff"],
+      "merchant": ["banker", "saloon_keeper", "entertainer"],
+      "sheriff": ["marshal", "preacher", "teacher"]
+    },
+    
+    "potential_conflicts": {
+      "prospector": ["farmer", "rancher"],
+      "saloon_keeper": ["preacher", "teacher"],
+      "banker": ["prospector", "trapper"],
+      "marshal": ["saloon_keeper", "entertainer"]
+    },
+
+    "mentor_relationships": {
+      "blacksmith": ["carpenter", "farmer"],
+      "doctor": ["teacher", "preacher"],
+      "sheriff": ["marshal"],
+      "merchant": ["banker"]
+    }
+  },
+
+  "character_generation_weights": {
+    "settlement_stage": {
+      "founding": {
+        "farmer": 0.25,
+        "prospector": 0.20,
+        "blacksmith": 0.15,
+        "trapper": 0.10,
+        "preacher": 0.10,
+        "merchant": 0.10,
+        "carpenter": 0.10
+      },
+      "growing": {
+        "farmer": 0.20,
+        "merchant": 0.15,
+        "carpenter": 0.15,
+        "teacher": 0.10,
+        "doctor": 0.10,
+        "sheriff": 0.10,
+        "saloon_keeper": 0.10,
+        "prospector": 0.10
+      },
+      "established": {
+        "farmer": 0.15,
+        "merchant": 0.15,
+        "doctor": 0.12,
+        "teacher": 0.12,
+        "lawyer": 0.10,
+        "banker": 0.08,
+        "entertainer": 0.08,
+        "marshal": 0.05,
+        "others": 0.15
+      }
+    }
+  }
+}
