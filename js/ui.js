@@ -116,16 +116,7 @@ class FrontierUI {
         if (this.elements.exportBtn) {
             this.elements.exportBtn.addEventListener('click', () => this.exportChronicle());
         }
-        
-        // Speed control
-        if (this.elements.speedSlider) {
-            this.elements.speedSlider.addEventListener('input', (e) => {
-                const speed = parseInt(e.target.value);
-                this.updateSimulationSpeed(speed);
-            });
-        }
-        // Add to setupEventListeners() method
-if (document.getElementById('stepYearBtn')) {
+        if (document.getElementById('stepYearBtn')) {
     document.getElementById('stepYearBtn').addEventListener('click', () => {
         if (this.simulation && !this.simulation.isRunning) {
             this.advanceWithProgress(365, "Advancing 1 year...");
@@ -148,7 +139,15 @@ if (document.getElementById('step10YearBtn')) {
         }
     });
 }
-        // Add to setupEventListeners() in ui.js
+        // Speed control
+        if (this.elements.speedSlider) {
+            this.elements.speedSlider.addEventListener('input', (e) => {
+                const speed = parseInt(e.target.value);
+                this.updateSimulationSpeed(speed);
+            });
+        }
+        // Add to setupEventListeners() method
+
 if (document.getElementById('stepWeekBtn')) {
     document.getElementById('stepWeekBtn').addEventListener('click', () => {
         if (this.simulation) {
@@ -811,6 +810,7 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = FrontierUI;
 
 }
+
 
 
 
