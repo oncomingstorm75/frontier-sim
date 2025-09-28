@@ -273,6 +273,44 @@ if (document.getElementById('stepSeasonBtn')) {
             this.elements.stepBtn.disabled = isRunning;
         }
     }
+    // Add these to the existing setupEventListeners method
+if (document.getElementById('stepYearBtn')) {
+    document.getElementById('stepYearBtn').addEventListener('click', () => {
+        this.advanceWithProgress(365, "Advancing 1 Year...");
+    });
+}
+
+if (document.getElementById('step5YearBtn')) {
+    document.getElementById('step5YearBtn').addEventListener('click', () => {
+        this.advanceWithProgress(1825, "Advancing 5 Years...");
+    });
+}
+
+if (document.getElementById('step10YearBtn')) {
+    document.getElementById('step10YearBtn').addEventListener('click', () => {
+        this.advanceWithProgress(3650, "Advancing 10 Years...");
+    });
+}
+
+if (document.getElementById('customAdvanceBtn')) {
+    document.getElementById('customAdvanceBtn').addEventListener('click', () => {
+        const days = parseInt(document.getElementById('customDays').value);
+        if (days && days > 0 && days <= 10000) {
+            this.advanceWithProgress(days, `Advancing ${days} Days...`);
+        } else {
+            this.setStatus('Enter a valid number of days (1-10000)', 'warning');
+        }
+    });
+}
+
+// Allow Enter key in custom days input
+if (document.getElementById('customDays')) {
+    document.getElementById('customDays').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('customAdvanceBtn').click();
+        }
+    });
+}
 
     // Display Update Methods
     updateDisplay() {
@@ -773,5 +811,6 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = FrontierUI;
 
 }
+
 
 
