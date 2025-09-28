@@ -707,7 +707,61 @@ if (document.getElementById('stepSeasonBtn')) {
         this.elements = {};
     }
 }
-
+// Add to FrontierUI class
+advanceWithProgress(days, title) {
+    // Show progress modal
+    const modalContent = `
+        <div class="text-center">
+            <h5>${title}</h5>
+            <div class="progress mb-3">
+                <div id="advanceProgress" class="progress-bar" style="width: 0%"></div>
+            </div>
+            <p id="advanceStatus">Starting simulation...</p>
+            <small id="advanceDetails" class="text-muted">Day 0 of ${days}</small>
+        </div>
+    `;
+    
+    this.showModal(title, modalContent);
+    
+    // Advance in chunks to show progress
+    let currentDay = 0;
+    const chunkSize = Math.min(30, Math.max(1, Math.floor(days / 50))); // Adaptive chunk size
+    
+    const advanceChunk = () => {
+        const remaining = days - currentDay;
+        const thisChunk = Math.min(chunkSize, remaining);
+        
+        // Advance simulation
+        this.simulation.stepDays(thisChunk);
+        currentDay += thisChunk;
+        
+        // Update progress
+        const percentage = (currentDay / days) * 100;
+        document.getElementById('advanceProgress').style.width = `${percentage}%`;
+        document.getElementById('advanceStatus').textContent = 
+            `${Math.round(percentage)}% Complete`;
+        document.getElementById('advanceDetails').textContent = 
+            `Day ${currentDay} of ${days} - ${this.simulation.gameState.date.getFullYear()}`;
+        
+        if (currentDay < days) {
+            // Continue advancing
+            setTimeout(advanceChunk, 10); // Small delay to show progress
+        } else {
+            // Finished
+            document.getElementById('advanceStatus').textContent = "Complete!";
+            this.updateDisplay();
+            
+            // Auto-close modal after 2 seconds
+            setTimeout(() => {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('medicalModal'));
+                if (modal) modal.hide();
+            }, 2000);
+        }
+    };
+    
+    // Start advancing
+    setTimeout(advanceChunk, 100);
+}
 // Initialize UI when DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
     window.frontierUI = new FrontierUI();
@@ -719,3 +773,4 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = FrontierUI;
 
 }
+
