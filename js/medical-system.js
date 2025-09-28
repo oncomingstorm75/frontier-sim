@@ -678,7 +678,10 @@ class MedicalSystem {
     // Calculate overall health impact on character abilities
     updateOverallHealth(character) {
         if (!character.injuries && !character.diseases) return;
-
+        // In updateOverallHealth() method, add:
+        if (character.stats.health <= 0) {
+        this.handleCharacterDeath(character, 'health_failure');
+        }
         let totalWorkPenalty = 0;
         let totalMobilityPenalty = 0;
         let totalPain = 0;
