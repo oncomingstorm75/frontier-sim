@@ -1855,7 +1855,7 @@ updateResources() {
     // Update market prices based on supply/demand
     this.updateMarketPrices();
 }
-    }
+    
 
     updateMarketPrices() {
         if (!this.gameState.economy.market_prices) return;
