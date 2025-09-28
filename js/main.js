@@ -1411,6 +1411,28 @@ stepToDay(targetDay) {
             survivalScore: this.calculateSurvivalScore()
         };
     }
+    getRandomFemaleName() {
+    const femaleCharacters = this.gameState.characters.filter(c => c.gender === 'female');
+    if (femaleCharacters.length > 0) {
+        return window.FrontierUtils.Random.choice(femaleCharacters).name;
+    }
+    return 'a woman';
+}
+
+getRandomMaleName() {
+    const maleCharacters = this.gameState.characters.filter(c => c.gender === 'male');
+    if (maleCharacters.length > 0) {
+        return window.FrontierUtils.Random.choice(maleCharacters).name;
+    }
+    return 'a man';
+}
+
+getRandomChildName() {
+    // Generate a random child name using your data loader
+    const gender = window.FrontierUtils.Random.choice(['male', 'female']);
+    const culture = this.selectCulture();
+    return this.dataLoader.getRandomName(gender, culture);
+}
 }
 
 // Make classes available globally
