@@ -1,0 +1,15 @@
+{
+  "settlements": {
+    "red_rock_territory": {
+      "name": "Red Rock Territory",
+      "population": 0,
+      "resources": {
+        "abundant": ["stone", "wood"],
+        "scarce": ["metal", "medicine"]
+      }
+    }
+  },
+  "technology": {
+    "available": ["basic_farming", "carpentry", "blacksmithing"]
+  }
+}

@@ -1,0 +1,333 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Comprehensive event database for Red Rock Territory frontier simulation",
+    "total_events": 500,
+    "categories": ["social", "economic", "environmental", "conflict", "supernatural", "technological"]
+  },
+
+  "event_categories": {
+    "social": {
+      "weight": 0.35,
+      "subcategories": {
+        "births_deaths": {
+          "birth": [
+            {
+              "template": "{mother} gave birth to a healthy {gender} named {child_name} during the {season} season. The community celebrates with an impromptu feast at {location}.",
+              "severity_range": [2, 5],
+              "effects": [{"type": "population_increase", "value": 1}, {"type": "community_mood", "value": 10}],
+              "requirements": {"female_settlers": 1, "age_range": [18, 40]}
+            },
+            {
+              "template": "After a difficult labor lasting through the night, {mother} delivered {child_name} with {midwife} attending. The {weather} seemed to bless the new arrival.",
+              "severity_range": [3, 6],
+              "effects": [{"type": "population_increase", "value": 1}, {"type": "health_impact", "character": "mother", "value": -10}],
+              "requirements": {"midwife_present": true}
+            },
+            {
+              "template": "Tragedy struck when {mother} died in childbirth, leaving behind {child_name} and a grieving community. {father} now faces the challenge of raising the child alone.",
+              "severity_range": [8, 10],
+              "effects": [{"type": "population_change", "value": 0}, {"type": "community_mood", "value": -20}, {"type": "orphan_crisis", "value": true}],
+              "probability": 0.15
+            }
+          ],
+          "death": [
+            {
+              "template": "{character} passed away peacefully in their sleep at the age of {age}. The community gathered at {location} to remember their contributions to frontier life.",
+              "severity_range": [4, 7],
+              "effects": [{"type": "population_decrease", "value": 1}, {"type": "community_mood", "value": -8}],
+              "requirements": {"age_minimum": 60}
+            },
+            {
+              "template": "A mining accident at {location} claimed the life of {character}. Their family and fellow miners mourn the loss of a hardworking soul.",
+              "severity_range": [7, 9],
+              "effects": [{"type": "population_decrease", "value": 1}, {"type": "mining_safety_concern", "value": true}, {"type": "family_trauma", "value": true}],
+              "requirements": {"occupation": "miner"}
+            },
+            {
+              "template": "Disease took {character} despite the best efforts of {doctor}. The {illness} had been spreading through the settlement, claiming another victim.",
+              "severity_range": [6, 8],
+              "effects": [{"type": "population_decrease", "value": 1}, {"type": "health_crisis", "value": true}, {"type": "fear_spread", "value": 5}],
+              "requirements": {"disease_outbreak": true}
+            }
+          ]
+        },
+        "relationships": {
+          "marriage": [
+            {
+              "template": "{bride} and {groom} were married in a beautiful ceremony at {location}. The whole settlement turned out to celebrate the union with dancing and feasting.",
+              "severity_range": [4, 6],
+              "effects": [{"type": "community_mood", "value": 15}, {"type": "relationship_bond", "characters": ["bride", "groom"], "value": 100}],
+              "requirements": {"single_adults": 2}
+            },
+            {
+              "template": "Despite opposition from {bride}'s family, {bride} and {groom} eloped in a simple ceremony. The controversial marriage has divided the community.",
+              "severity_range": [5, 7],
+              "effects": [{"type": "community_division", "value": true}, {"type": "family_conflict", "value": true}],
+              "probability": 0.3
+            }
+          ],
+          "conflict": [
+            {
+              "template": "A heated argument between {character1} and {character2} over {dispute_cause} nearly came to blows at {location}. Other settlers had to intervene to keep the peace.",
+              "severity_range": [3, 6],
+              "effects": [{"type": "relationship_damage", "characters": ["character1", "character2"], "value": -25}, {"type": "community_tension", "value": 5}],
+              "variables": {"dispute_cause": ["land boundaries", "water rights", "livestock", "business dealings", "family honor"]}
+            },
+            {
+              "template": "The long-standing feud between {character1} and {character2} erupted into violence when {character1} accused {character2} of {accusation}.",
+              "severity_range": [6, 8],
+              "effects": [{"type": "violence_incident", "value": true}, {"type": "injury", "character": "random", "value": 15}, {"type": "law_enforcement_needed", "value": true}],
+              "variables": {"accusation": ["cheating at cards", "claim jumping", "cattle rustling", "courting their daughter", "spreading lies"]}
+            }
+          ]
+        }
+      }
+    },
+
+    "economic": {
+      "weight": 0.25,
+      "subcategories": {
+        "mining": {
+          "discovery": [
+            {
+              "template": "{prospector} struck a rich vein of copper ore in {location}! Word spread quickly, and claim stakes appeared overnight as the mining rush began.",
+              "severity_range": [6, 8],
+              "effects": [{"type": "resource_discovery", "resource": "copper", "value": 200}, {"type": "population_attraction", "value": 15}, {"type": "land_speculation", "value": true}],
+              "requirements": {"location_type": "mining_area"}
+            },
+            {
+              "template": "While panning for gold near {location}, {prospector} found nothing but fool's gold and broken dreams. Another day, another disappointment in the mines.",
+              "severity_range": [2, 4],
+              "effects": [{"type": "mood_impact", "character": "prospector", "value": -10}, {"type": "time_wasted", "value": true}]
+            },
+            {
+              "template": "{prospector} discovered traces of silver in the abandoned mine shaft at {location}. The find isn't rich, but it's enough to keep hope alive.",
+              "severity_range": [4, 6],
+              "effects": [{"type": "resource_discovery", "resource": "silver", "value": 50}, {"type": "mining_activity_increase", "value": 20}]
+            }
+          ],
+          "accident": [
+            {
+              "template": "A cave-in at {location} trapped {miner} for hours before rescue efforts freed them. Mining safety concerns grow among the workers.",
+              "severity_range": [6, 8],
+              "effects": [{"type": "injury", "character": "miner", "value": 25}, {"type": "mining_productivity", "value": -15}, {"type": "safety_regulations_needed", "value": true}]
+            },
+            {
+              "template": "Gas buildup in the {location} mine caused an explosion, injuring {miner} and {helper}. The incident highlights the dangers of frontier mining.",
+              "severity_range": [7, 9],
+              "effects": [{"type": "injury", "character": "miner", "value": 30}, {"type": "injury", "character": "helper", "value": 20}, {"type": "mining_shutdown", "location": "location", "duration": 7}]
+            }
+          ]
+        },
+        "trade": [
+          {
+            "template": "A merchant caravan arrived from {origin_city} with supplies desperately needed by the settlement. Prices are high, but goods are available.",
+            "severity_range": [3, 5],
+            "effects": [{"type": "resource_availability", "value": true}, {"type": "price_inflation", "value": 1.3}, {"type": "community_mood", "value": 8}],
+            "variables": {"origin_city": ["San Francisco", "Denver", "Santa Fe", "Fort Worth", "St. Louis"]}
+          },
+          {
+            "template": "The trading post at {location} burned down, destroying valuable supplies and disrupting commerce. {trader} lost everything in the blaze.",
+            "severity_range": [7, 9],
+            "effects": [{"type": "building_destruction", "building": "trading_post"}, {"type": "resource_loss", "resource": "trade_goods", "value": 150}, {"type": "economic_disruption", "duration": 30}]
+          }
+        ]
+      }
+    },
+
+    "environmental": {
+      "weight": 0.20,
+      "subcategories": {
+        "weather": [
+          {
+            "template": "A fierce blizzard swept through Red Rock Territory, trapping residents indoors for days. Snow drifts reached the rooftops in some areas.",
+            "severity_range": [6, 9],
+            "effects": [{"type": "resource_consumption", "resource": "food", "value": 40}, {"type": "resource_consumption", "resource": "wood", "value": 60}, {"type": "isolation", "duration": 3}],
+            "requirements": {"season": "winter"}
+          },
+          {
+            "template": "A drought has settled over the territory. Wells are running low, and the {river_name} has dropped to dangerous levels.",
+            "severity_range": [5, 8],
+            "effects": [{"type": "water_shortage", "value": true}, {"type": "crop_failure", "value": 0.6}, {"type": "livestock_stress", "value": true}],
+            "requirements": {"season": ["summer", "fall"]}
+          },
+          {
+            "template": "Flash floods from spring melts turned {location} into a raging torrent. {character} barely escaped when their cabin was swept away.",
+            "severity_range": [7, 9],
+            "effects": [{"type": "building_damage", "character": "character", "value": 1}, {"type": "resource_loss", "resource": "food", "value": 25}, {"type": "displacement", "character": "character", "duration": 14}],
+            "requirements": {"season": "spring"}
+          }
+        ],
+        "wildlife": [
+          {
+            "template": "A massive grizzly bear wandered into the settlement, causing panic before {hunter} managed to drive it away with warning shots.",
+            "severity_range": [5, 7],
+            "effects": [{"type": "fear_level", "value": 15}, {"type": "hunting_skill_recognition", "character": "hunter", "value": 10}, {"type": "wildlife_threat", "duration": 7}]
+          },
+          {
+            "template": "Wolves have been spotted near the livestock pens. {rancher} reported losing two calves to the pack last night.",
+            "severity_range": [4, 6],
+            "effects": [{"type": "livestock_loss", "value": 2}, {"type": "predator_problem", "value": true}, {"type": "guard_duty_needed", "duration": 14}]
+          },
+          {
+            "template": "A rattlesnake bit {victim} while they were gathering firewood near {location}. Quick treatment with whiskey and prayer saved their life.",
+            "severity_range": [6, 8],
+            "effects": [{"type": "injury", "character": "victim", "value": 35}, {"type": "health_crisis", "character": "victim", "duration": 7}, {"type": "area_caution", "location": "location", "duration": 14}]
+          }
+        ]
+      }
+    },
+
+    "conflict": {
+      "weight": 0.15,
+      "subcategories": {
+        "banditry": [
+          {
+            "template": "The notorious {bandit_leader} and their gang raided the settlement at dawn, making off with supplies and leaving chaos in their wake.",
+            "severity_range": [7, 9],
+            "effects": [{"type": "resource_theft", "resource": "gold", "value": 75}, {"type": "resource_theft", "resource": "food", "value": 50}, {"type": "fear_level", "value": 25}, {"type": "security_needed", "value": true}],
+            "variables": {"bandit_leader": ["Black Pete", "Iron Annie", "Snake Eyes McGraw", "Scarred Jack", "The Phantom Rider"]}
+          },
+          {
+            "template": "Highway robbers ambushed {traveler} on the road to {destination}. They escaped with their life but lost their valuable cargo.",
+            "severity_range": [5, 7],
+            "effects": [{"type": "trade_disruption", "value": true}, {"type": "resource_loss", "resource": "trade_goods", "value": 30}, {"type": "travel_danger", "route": "destination", "duration": 21}]
+          }
+        ],
+        "disputes": [
+          {
+            "template": "A boundary dispute between {farmer1} and {farmer2} escalated when fences were cut and crops trampled. The sheriff had to intervene.",
+            "severity_range": [4, 6],
+            "effects": [{"type": "property_damage", "value": 20}, {"type": "legal_intervention", "value": true}, {"type": "community_division", "value": 10}]
+          },
+          {
+            "template": "Water rights became a heated issue when {upstream_user} built a dam, affecting {downstream_user}'s supply. Tensions run high.",
+            "severity_range": [5, 8],
+            "effects": [{"type": "water_conflict", "value": true}, {"type": "legal_precedent_needed", "value": true}, {"type": "resource_access", "character": "downstream_user", "penalty": 0.5}]
+          }
+        ]
+      }
+    },
+
+    "supernatural": {
+      "weight": 0.03,
+      "subcategories": {
+        "unexplained": [
+          {
+            "template": "Strange lights were seen dancing over {location} last night. {witness} swears they moved with purpose, unlike any natural phenomenon.",
+            "severity_range": [3, 6],
+            "effects": [{"type": "superstition_increase", "value": 15}, {"type": "curiosity", "value": true}, {"type": "area_interest", "location": "location", "duration": 7}]
+          },
+          {
+            "template": "The old mine at {location} echoes with sounds that can't be explained. {brave_explorer} investigated but found nothing - except an overwhelming sense of dread.",
+            "severity_range": [4, 7],
+            "effects": [{"type": "fear_level", "value": 10}, {"type": "area_avoidance", "location": "location", "duration": 14}, {"type": "local_legend", "value": true}]
+          }
+        ],
+        "folklore": [
+          {
+            "template": "An old Navajo warned {settler} about the significance of {sacred_site}. The settler now questions whether their planned construction should proceed.",
+            "severity_range": [3, 5],
+            "effects": [{"type": "cultural_awareness", "value": 10}, {"type": "construction_delay", "location": "sacred_site", "duration": 7}, {"type": "native_relations", "value": 5}]
+          },
+          {
+            "template": "A traveling storyteller shared tales of the {legendary_creature} said to roam these territories. Children now look nervously at shadows.",
+            "severity_range": [2, 4],
+            "effects": [{"type": "entertainment_value", "value": 8}, {"type": "childhood_fears", "value": 5}, {"type": "local_mythology", "value": true}],
+            "variables": {"legendary_creature": ["Windigo", "Thunderbird", "Desert Spirit", "Canyon Ghost", "Shadow Walker"]}
+          }
+        ]
+      }
+    },
+
+    "technological": {
+      "weight": 0.02,
+      "subcategories": {
+        "innovation": [
+          {
+            "template": "{inventor} created a new contraption for {purpose} using scrap metal and ingenuity. The device shows promise but needs refinement.",
+            "severity_range": [3, 6],
+            "effects": [{"type": "innovation_attempt", "value": true}, {"type": "productivity_potential", "value": 15}, {"type": "community_interest", "value": 10}],
+            "variables": {"purpose": ["mining efficiency", "water pumping", "grain processing", "construction aid", "transportation"]}
+          },
+          {
+            "template": "The new telegraph line reached {location}, connecting the settlement to the outside world for the first time. News travels fast now.",
+            "severity_range": [5, 7],
+            "effects": [{"type": "communication_revolution", "value": true}, {"type": "trade_opportunities", "value": 20}, {"type": "modernization", "value": 15}],
+            "requirements": {"year_minimum": 1860}
+          }
+        ],
+        "failure": [
+          {
+            "template": "{inventor}'s ambitious steam-powered mining device exploded during its first test, showering {location} with metal fragments and disappointment.",
+            "severity_range": [5, 8],
+            "effects": [{"type": "innovation_setback", "value": true}, {"type": "injury_risk", "value": 20}, {"type": "resource_waste", "resource": "metal", "value": 40}]
+          }
+        ]
+      }
+    }
+  },
+
+  "event_modifiers": {
+    "seasonal": {
+      "spring": {
+        "birth_rate_modifier": 1.2,
+        "construction_modifier": 1.3,
+        "travel_modifier": 1.1,
+        "weather_events": ["flood", "storm", "mild_weather"]
+      },
+      "summer": {
+        "drought_modifier": 1.4,
+        "fire_risk_modifier": 1.6,
+        "trade_modifier": 1.2,
+        "weather_events": ["drought", "heat_wave", "thunderstorm"]
+      },
+      "fall": {
+        "harvest_modifier": 1.5,
+        "preparation_modifier": 1.3,
+        "hunting_modifier": 1.4,
+        "weather_events": ["early_frost", "rain", "clear_skies"]
+      },
+      "winter": {
+        "isolation_modifier": 1.8,
+        "resource_consumption_modifier": 1.4,
+        "illness_modifier": 1.3,
+        "weather_events": ["blizzard", "ice_storm", "bitter_cold"]
+      }
+    },
+    "population": {
+      "small": {"conflict_reduction": 0.7, "cooperation_bonus": 1.2},
+      "medium": {"event_variety": 1.1, "complexity_bonus": 1.1},
+      "large": {"conflict_increase": 1.3, "economic_activity": 1.4}
+    },
+    "mood": {
+      "high": {"celebration_bonus": 1.4, "cooperation_bonus": 1.2, "innovation_bonus": 1.1},
+      "neutral": {"baseline_events": 1.0},
+      "low": {"conflict_increase": 1.3, "desperation_events": 1.5, "exodus_risk": 1.2}
+    }
+  },
+
+  "location_specific": {
+    "red_rock_ravine": {
+      "mining_events": 1.4,
+      "geological_events": 1.2,
+      "isolation_factor": 1.1
+    },
+    "tobacco_town": {
+      "trade_events": 1.3,
+      "social_events": 1.2,
+      "cultural_events": 1.1
+    },
+    "bloodmarsh_bog": {
+      "environmental_danger": 1.5,
+      "supernatural_events": 1.8,
+      "disease_risk": 1.3
+    },
+    "whiskey_creek": {
+      "water_events": 1.2,
+      "wildlife_encounters": 1.3,
+      "settlement_events": 1.1
+    }
+  }
+}

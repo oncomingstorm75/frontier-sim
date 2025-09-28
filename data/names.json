@@ -1,0 +1,237 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Authentic frontier-era names for Wild West simulation",
+    "era": "1840-1890",
+    "cultural_groups": ["anglo_american", "mexican", "native_american", "irish", "german", "chinese"]
+  },
+
+  "names": {
+    "male": {
+      "anglo_american": [
+        "Jeremiah", "Ezekiel", "Obadiah", "Thaddeus", "Barnabas", "Josiah", 
+        "Samuel", "Benjamin", "Caleb", "Daniel", "Isaiah", "Solomon", "Micah",
+        "Abraham", "Isaac", "Jacob", "Moses", "Aaron", "Silas", "Ephraim",
+        "Elijah", "Elisha", "Zachariah", "Nathaniel", "Timothy", "Matthew",
+        "Luke", "Mark", "John", "Peter", "Paul", "James", "Thomas", "Andrew",
+        "Hiram", "Orville", "Chester", "Lester", "Hector", "Jasper", "Casper",
+        "Homer", "Ulysses", "Virgil", "Horace", "Cicero", "Augustus", "Julius",
+        "Clarence", "Herbert", "Wilbur", "Orville", "Chester", "Lester", "Oscar",
+        "Edmund", "Edgar", "Edwin", "Eugene", "Ernest", "Frank", "Fred", "George",
+        "Henry", "Hugh", "Harry", "Jack", "Joe", "Jim", "Tom", "Bill", "Bob",
+        "Sam", "Ben", "Dan", "Dave", "Mike", "Pat", "Pete", "Will", "Walt"
+      ],
+      "mexican": [
+        "José", "Juan", "Miguel", "Carlos", "Antonio", "Francisco", "Manuel",
+        "Luis", "Rafael", "Pedro", "Alejandro", "Fernando", "Eduardo", "Roberto",
+        "Ricardo", "Diego", "Arturo", "Andrés", "Felipe", "Gonzalo", "Ignacio",
+        "Ramón", "Salvador", "Emilio", "Esteban", "Tomás", "Víctor", "Ángel"
+      ],
+      "irish": [
+        "Patrick", "Michael", "Sean", "Liam", "Connor", "Brian", "Kevin", "Declan",
+        "Brendan", "Colin", "Fergus", "Aiden", "Cian", "Niall", "Owen", "Seamus",
+        "Kieran", "Ronan", "Eamon", "Cormac", "Paddy", "Mick", "Danny", "Tommy"
+      ],
+      "german": [
+        "Wilhelm", "Friedrich", "Heinrich", "Johann", "Karl", "Ludwig", "Otto",
+        "Gustav", "Franz", "Ernst", "Paul", "Georg", "Hans", "Hermann", "Rudolf",
+        "Walter", "Emil", "Albert", "Max", "Fritz", "Klaus", "Hans", "Dieter"
+      ],
+      "chinese": [
+        "Li Wei", "Zhang Ming", "Wang Lei", "Chen Jun", "Liu Feng", "Yang Qiang",
+        "Zhao Gang", "Huang Long", "Wu Bin", "Zhou Peng", "Xu Tao", "Sun Hao"
+      ]
+    },
+    
+    "female": {
+      "anglo_american": [
+        "Sarah", "Rebecca", "Martha", "Elizabeth", "Mary", "Ruth", "Esther",
+        "Hannah", "Abigail", "Deborah", "Rachel", "Leah", "Miriam", "Naomi",
+        "Judith", "Susannah", "Bathsheba", "Tabitha", "Priscilla", "Lydia",
+        "Charity", "Faith", "Hope", "Grace", "Mercy", "Patience", "Prudence",
+        "Temperance", "Constance", "Felicity", "Serenity", "Chastity", "Honor",
+        "Emma", "Catherine", "Anne", "Jane", "Margaret", "Helen", "Frances",
+        "Clara", "Alice", "Rose", "Pearl", "Ruby", "Opal", "Violet", "Lily",
+        "Daisy", "Iris", "Flora", "Cora", "Nora", "Dora", "Laura", "Stella",
+        "Bella", "Ella", "Anna", "Eva", "Ada", "Ida", "Eda", "Ava", "Ivy",
+        "May", "Kay", "Joy", "Sue", "Lou", "Fay", "Gay", "Nell", "Bell"
+      ],
+      "mexican": [
+        "María", "Carmen", "Rosa", "Ana", "Isabel", "Teresa", "Francisca",
+        "Guadalupe", "Esperanza", "Dolores", "Concepción", "Pilar", "Mercedes",
+        "Soledad", "Remedios", "Josefa", "Antonia", "Catalina", "Manuela"
+      ],
+      "irish": [
+        "Bridget", "Catherine", "Margaret", "Mary", "Ellen", "Honora", "Julia",
+        "Johanna", "Ann", "Nora", "Katie", "Molly", "Peggy", "Maggie", "Nellie",
+        "Maureen", "Colleen", "Eileen", "Siobhan", "Aoife", "Niamh", "Sinead"
+      ],
+      "german": [
+        "Anna", "Maria", "Elisabeth", "Margarete", "Emma", "Bertha", "Martha",
+        "Frieda", "Rosa", "Clara", "Bertha", "Wilhelmina", "Mathilde", "Hedwig",
+        "Gertrude", "Agnes", "Paula", "Elsa", "Marta", "Greta", "Ursula"
+      ],
+      "chinese": [
+        "Li Mei", "Zhang Hua", "Wang Xiu", "Chen Lan", "Liu Yan", "Yang Hong",
+        "Zhao Yu", "Huang Fang", "Wu Ling", "Zhou Jing", "Xu Na", "Sun Li"
+      ]
+    },
+
+    "surnames": {
+      "anglo_american": [
+        "Stone", "McGillicuddy", "Whitman", "Crawford", "Henderson", "Morrison",
+        "Campbell", "Stewart", "McLean", "Garrett", "Thompson", "Anderson",
+        "Wilson", "Taylor", "Brown", "Davis", "Miller", "Moore", "Jackson",
+        "Martin", "Lee", "Walker", "Hall", "Allen", "Young", "King", "Wright",
+        "Lopez", "Hill", "Scott", "Green", "Adams", "Baker", "Gonzalez",
+        "Nelson", "Carter", "Mitchell", "Perez", "Roberts", "Turner", "Phillips",
+        "Parker", "Evans", "Edwards", "Collins", "Stewart", "Sanchez", "Morris",
+        "Rogers", "Reed", "Cook", "Morgan", "Bell", "Murphy", "Bailey", "Rivera",
+        "Cooper", "Richardson", "Cox", "Howard", "Ward", "Torres", "Peterson",
+        "Gray", "Ramirez", "James", "Watson", "Brooks", "Kelly", "Sanders",
+        "Price", "Bennett", "Wood", "Barnes", "Ross", "Henderson", "Coleman",
+        "Jenkins", "Perry", "Powell", "Long", "Patterson", "Hughes", "Flores",
+        "Washington", "Butler", "Simmons", "Foster", "Gonzales", "Bryant",
+        "Alexander", "Russell", "Griffin", "Diaz", "Hayes", "Myers", "Ford",
+        "Hamilton", "Graham", "Sullivan", "Wallace", "Woods", "Cole", "West",
+        "Jordan", "Owens", "Reynolds", "Fisher", "Ellis", "Harrison", "Gibson",
+        "Mcdonald", "Cruz", "Marshall", "Ortiz", "Gomez", "Murray", "Freeman",
+        "Wells", "Webb", "Simpson", "Stevens", "Tucker", "Porter", "Hunter",
+        "Hicks", "Crawford", "Henry", "Boyd", "Mason", "Morales", "Kennedy",
+        "Warren", "Dixon", "Ramos", "Reyes", "Burns", "Gordon", "Shaw",
+        "Holmes", "Rice", "Robertson", "Hunt", "Black", "Daniels", "Palmer"
+      ],
+      "mexican": [
+        "García", "Rodríguez", "Martínez", "Hernández", "López", "González",
+        "Pérez", "Sánchez", "Ramírez", "Cruz", "Flores", "Gómez", "Díaz",
+        "Reyes", "Morales", "Jiménez", "Gutiérrez", "Ruiz", "Mendoza", "Aguilar",
+        "Torres", "Vázquez", "Castro", "Romero", "Vargas", "Acosta", "Herrera",
+        "Contreras", "Ramos", "Castillo", "Álvarez", "Campos", "Guerrero",
+        "Medina", "Luna", "Espinoza", "Delgado", "Sandoval", "Valdez", "Ortega"
+      ],
+      "irish": [
+        "O'Brien", "O'Sullivan", "O'Connor", "O'Neill", "O'Reilly", "Murphy",
+        "Kelly", "McCarthy", "Walsh", "Ryan", "Doyle", "Byrne", "Casey",
+        "Fitzgerald", "Lynch", "Murray", "Quinn", "Burke", "Daly", "Gallagher",
+        "Flanagan", "Malone", "Kennedy", "Brennan", "Donnelly", "Mahoney",
+        "McDonnell", "McGuire", "Connolly", "McLoughlin", "McMahon", "Rafferty"
+      ],
+      "german": [
+        "Müller", "Schmidt", "Schneider", "Fischer", "Weber", "Meyer", "Wagner",
+        "Becker", "Schulz", "Hoffmann", "Schäfer", "Koch", "Bauer", "Richter",
+        "Klein", "Wolf", "Schröder", "Neumann", "Schwarz", "Zimmermann",
+        "Braun", "Krüger", "Hofmann", "Hartmann", "Lange", "Schmitt", "Werner",
+        "Schmitz", "Krause", "Meier", "Lehmann", "Schmid", "Schulze", "Maier"
+      ],
+      "chinese": [
+        "Li", "Wang", "Zhang", "Liu", "Chen", "Yang", "Huang", "Zhao", "Wu",
+        "Zhou", "Xu", "Sun", "Ma", "Zhu", "Hu", "Guo", "He", "Lin", "Gao",
+        "Luo", "Zheng", "Song", "Xie", "Tang", "Han", "Cao", "Deng", "Feng"
+      ]
+    },
+
+    "nicknames": {
+      "male": [
+        "Tex", "Buck", "Slim", "Red", "Dusty", "Doc", "Preacher", "Judge",
+        "Sheriff", "Marshal", "Captain", "Major", "Colonel", "Sergeant",
+        "Corporal", "Scout", "Ranger", "Hunter", "Trapper", "Prospector",
+        "Miner", "Blacky", "Whitey", "Lefty", "Shorty", "Tiny", "Big Jim",
+        "Little Joe", "Wild Bill", "Buffalo", "Bear", "Wolf", "Eagle",
+        "Hawk", "Snake", "Fox", "Coyote", "Thunder", "Lightning", "Storm",
+        "Iron", "Steel", "Stone", "Rock", "Flint", "Clay", "Mud", "Dust"
+      ],
+      "female": [
+        "Belle", "Pearl", "Ruby", "Diamond", "Silver", "Goldie", "Sunny",
+        "Rosie", "Daisy", "Lily", "Violet", "Iris", "Poppy", "Pansy",
+        "Honey", "Sugar", "Candy", "Cookie", "Peaches", "Cherry", "Apple",
+        "Ginger", "Pepper", "Cinnamon", "Sage", "Thyme", "Mint", "Basil"
+      ]
+    }
+  },
+
+  "naming_patterns": {
+    "frontier_conventions": {
+      "male_patterns": [
+        "{first} {surname}",
+        "{first} '{nickname}' {surname}",
+        "{nickname} {surname}",
+        "{first} {middle_initial}. {surname}",
+        "{title} {first} {surname}"
+      ],
+      "female_patterns": [
+        "{first} {surname}",
+        "Miss {first} {surname}",
+        "Mrs. {first} {surname}",
+        "{first} {middle_initial}. {surname}",
+        "{nickname}"
+      ],
+      "titles": {
+        "male": ["Mr.", "Dr.", "Rev.", "Judge", "Sheriff", "Captain", "Colonel"],
+        "female": ["Miss", "Mrs.", "Ma'am", "Lady"]
+      }
+    },
+
+    "cultural_mixing": {
+      "common_combinations": [
+        {"first": "mexican", "surname": "anglo_american", "reason": "intermarriage"},
+        {"first": "irish", "surname": "german", "reason": "immigration_waves"},
+        {"first": "anglo_american", "surname": "irish", "reason": "cultural_blending"},
+        {"first": "chinese", "surname": "anglo_american", "reason": "adoption_integration"}
+      ]
+    },
+
+    "occupational_names": {
+      "derived_surnames": [
+        "Smith", "Miller", "Baker", "Cooper", "Carter", "Wheeler", "Turner",
+        "Mason", "Carpenter", "Fisher", "Hunter", "Farmer", "Gardner",
+        "Shepherd", "Cook", "Brewer", "Tanner", "Weaver", "Taylor", "Barber"
+      ],
+      "location_surnames": [
+        "Hill", "Woods", "Fields", "Rivers", "Brooks", "Creek", "Valley",
+        "Mountain", "Ridge", "Mesa", "Canyon", "Springs", "Wells", "Ford",
+        "Bridge", "Church", "Castle", "Tower", "Mill", "Mine", "Ranch"
+      ]
+    }
+  },
+
+  "name_generation_rules": {
+    "cultural_weights": {
+      "red_rock_territory": {
+        "anglo_american": 0.60,
+        "mexican": 0.20,
+        "irish": 0.10,
+        "german": 0.05,
+        "chinese": 0.03,
+        "native_american": 0.02
+      }
+    },
+    
+    "historical_accuracy": {
+      "common_first_names_1849": {
+        "male": ["John", "William", "James", "George", "Charles", "Joseph", "Frank", "Robert", "Edward", "Henry"],
+        "female": ["Mary", "Elizabeth", "Sarah", "Margaret", "Catherine", "Ann", "Jane", "Emma", "Martha", "Helen"]
+      },
+      "immigrant_waves": {
+        "1840s": ["irish", "german"],
+        "1850s": ["chinese", "mexican"],
+        "1860s": ["scandinavian"],
+        "1870s": ["eastern_european"]
+      }
+    },
+
+    "naming_conventions": {
+      "family_traditions": {
+        "biblical_preference": 0.4,
+        "family_name_reuse": 0.3,
+        "saint_names": 0.2,
+        "nature_names": 0.1
+      },
+      "nickname_generation": {
+        "physical_traits": ["Red", "Slim", "Tiny", "Big", "Tall", "Short"],
+        "personality": ["Wild", "Quiet", "Happy", "Serious", "Quick", "Slow"],
+        "occupation": ["Doc", "Preacher", "Judge", "Sheriff", "Captain"],
+        "origin": ["Tex", "Dakota", "Colorado", "Montana", "Arizona"]
+      }
+    }
+  }
+}
