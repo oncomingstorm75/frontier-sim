@@ -533,15 +533,21 @@ class AdvancedWeatherSystem {
         });
     }
 
-    applyOngoingWeatherEffects(event) {
-        const effects = this.weatherEffects[event.type];
-        if (!effects.effects) return;
-        
-        // Apply daily effects during ongoing events
-        Object.entries(effects.effects).forEach(([category, categoryEffects]) => {
-            this.applyCategoryEffects(category, categoryEffects, event.intensity);
-        });
+   applyOngoingWeatherEffects(event) {
+    // Only apply effects for severe weather events
+    const severeWeatherTypes = ['tornado', 'wildfire', 'blizzard', 'drought', 'flash_flood', 'hailstorm', 'dust_storm'];
+    
+    if (!severeWeatherTypes.includes(event.type)) {
+        return; // Skip minor weather events
     }
+    
+    const effects = this.weatherEffects[event.type];
+    if (!effects || !effects.effects) return;
+    
+    Object.entries(effects.effects).forEach(([category, categoryEffects]) => {
+        this.applyCategoryEffects(category, categoryEffects, event.intensity);
+    });
+}
 
     applyCategoryEffects(category, effects, intensity) {
         switch (category) {
