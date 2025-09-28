@@ -348,17 +348,14 @@ class FrontierSimulation {
             },
             
             infrastructure: {
-                buildings: [
-                    { name: 'Main Hall', type: 'community', capacity: 50, condition: 100 },
-                    { name: 'Storage Shed', type: 'storage', capacity: 200, condition: 85 },
-                    { name: 'Well', type: 'water', capacity: 100, condition: 90 }
-                ],
+                buildings: [], // START WITH NO BUILDINGS!
+                construction_projects: [],
                 defenses: {
-                    walls: false,
-                    watchtowers: 0,
-                    armed_guards: 0
-                }
-            },
+                walls: false,
+                watchtowers: 0,
+                armed_guards: 0
+              }
+        },
             
             economy: {
                 trade_routes: [],
@@ -942,7 +939,406 @@ class FrontierSimulation {
         
         return descriptions[type] || `${participants[0].name} had an eventful day`;
     }
+// Add this new method to FrontierSimulation class
+checkBuildingOpportunities() {
+    const population = this.gameState.population.total;
+    const resources = this.gameState.resources;
+    const buildings = this.gameState.infrastructure.buildings;
+    
+    // Check each building type for construction triggers
+    this.buildingDefinitions.forEach(buildingDef => {
+        if (this.shouldConstructBuilding(buildingDef, population, resources, buildings)) {
+            this.initiateConstruction(buildingDef);
+        }
+    });
+    
+    // Process ongoing construction projects
+    this.processConstructionProjects();
+}
 
+// Building definitions with requirements and costs
+buildingDefinitions = [
+    {
+        name: 'Shelter Tent',
+        type: 'basic_shelter',
+        priority: 1,
+        requirements: {
+            population_min: 1,
+            weather_protection_needed: true
+        },
+        costs: {
+            wood: 5,
+            tools: 1,
+            labor_days: 2
+        },
+        capacity: 4,
+        benefits: ['basic_weather_protection', 'morale_boost_5']
+    },
+    {
+        name: 'Storage Shed',
+        type: 'storage',
+        priority: 2,
+        requirements: {
+            population_min: 3,
+            resources_overflow: 50
+        },
+        costs: {
+            wood: 20,
+            stone: 5,
+            tools: 2,
+            labor_days: 5
+        },
+        capacity: 200,
+        benefits: ['resource_protection', 'storage_capacity_200']
+    },
+    {
+        name: 'Well',
+        type: 'water',
+        priority: 2,
+        requirements: {
+            population_min: 4,
+            water_scarcity: true
+        },
+        costs: {
+            stone: 15,
+            tools: 3,
+            labor_days: 8
+        },
+        capacity: 100,
+        benefits: ['reliable_water', 'water_generation_10']
+    },
+    {
+        name: 'Main Hall',
+        type: 'community',
+        priority: 3,
+        requirements: {
+            population_min: 8,
+            community_meetings_needed: true
+        },
+        costs: {
+            wood: 50,
+            stone: 20,
+            tools: 5,
+            labor_days: 15
+        },
+        capacity: 50,
+        benefits: ['community_center', 'morale_boost_10', 'meeting_place']
+    },
+    {
+        name: 'Blacksmith Shop',
+        type: 'crafting',
+        priority: 4,
+        requirements: {
+            population_min: 6,
+            blacksmith_present: true,
+            tool_shortage: true
+        },
+        costs: {
+            wood: 30,
+            stone: 25,
+            metal: 10,
+            tools: 4,
+            labor_days: 12
+        },
+        benefits: ['tool_production', 'metalwork_efficiency', 'repair_capability']
+    },
+    {
+        name: 'General Store',
+        type: 'commerce',
+        priority: 5,
+        requirements: {
+            population_min: 12,
+            merchant_present: true,
+            trade_demand: 100
+        },
+        costs: {
+            wood: 40,
+            stone: 15,
+            money: 100,
+            tools: 3,
+            labor_days: 10
+        },
+        benefits: ['trade_hub', 'resource_exchange', 'economy_boost']
+    },
+    {
+        name: 'School House',
+        type: 'education',
+        priority: 6,
+        requirements: {
+            population_min: 15,
+            children_count: 5,
+            teacher_present: true
+        },
+        costs: {
+            wood: 35,
+            stone: 10,
+            money: 80,
+            tools: 2,
+            labor_days: 8
+        },
+        benefits: ['education', 'skill_development', 'literacy']
+    },
+    {
+        name: 'Church',
+        type: 'religious',
+        priority: 7,
+        requirements: {
+            population_min: 20,
+            preacher_present: true,
+            community_tragedy: true
+        },
+        costs: {
+            wood: 60,
+            stone: 30,
+            money: 150,
+            tools: 4,
+            labor_days: 20
+        },
+        benefits: ['spiritual_guidance', 'morale_boost_15', 'community_unity']
+    },
+    {
+        name: 'Doctor\'s Office',
+        type: 'medical',
+        priority: 8,
+        requirements: {
+            population_min: 25,
+            doctor_present: true,
+            medical_crisis: true
+        },
+        costs: {
+            wood: 25,
+            stone: 15,
+            money: 200,
+            tools: 3,
+            labor_days: 10
+        },
+        benefits: ['medical_care', 'health_bonus', 'epidemic_control']
+    }
+];
+
+// Check if building should be constructed
+shouldConstructBuilding(buildingDef, population, resources, existingBuildings) {
+    // Don't build if already exists (unless multiple allowed)
+    const exists = existingBuildings.some(b => b.type === buildingDef.type);
+    if (exists && !buildingDef.allowMultiple) return false;
+    
+    // Check basic requirements
+    const reqs = buildingDef.requirements;
+    
+    if (reqs.population_min && population < reqs.population_min) return false;
+    
+    // Check resource costs
+    const costs = buildingDef.costs;
+    for (const [resource, amount] of Object.entries(costs)) {
+        if (resource !== 'labor_days' && resources[resource] < amount) return false;
+    }
+    
+    // Check specific requirements
+    if (reqs.weather_protection_needed && this.needsWeatherProtection()) return false;
+    if (reqs.resources_overflow && this.getTotalResources() < reqs.resources_overflow) return false;
+    if (reqs.water_scarcity && !this.hasWaterScarcity()) return false;
+    if (reqs.blacksmith_present && !this.hasCharacterWithBackground('Blacksmith')) return false;
+    if (reqs.merchant_present && !this.hasCharacterWithBackground('Merchant')) return false;
+    if (reqs.teacher_present && !this.hasCharacterWithBackground('Teacher')) return false;
+    if (reqs.preacher_present && !this.hasCharacterWithBackground('Preacher')) return false;
+    if (reqs.doctor_present && !this.hasCharacterWithBackground('Doctor')) return false;
+    if (reqs.children_count && this.gameState.population.demographics.children < reqs.children_count) return false;
+    
+    return true;
+}
+
+// Initiate construction project
+initiateConstruction(buildingDef) {
+    const project = {
+        id: `construction_${Date.now()}`,
+        building: { ...buildingDef },
+        startDate: new Date(this.gameState.date),
+        daysRemaining: buildingDef.costs.labor_days,
+        resourcesSpent: false,
+        workers: []
+    };
+    
+    this.gameState.infrastructure.construction_projects.push(project);
+    
+    // Spend resources immediately
+    Object.entries(buildingDef.costs).forEach(([resource, amount]) => {
+        if (resource !== 'labor_days') {
+            this.gameState.resources[resource] -= amount;
+        }
+    });
+    
+    this.logGameEvent(`Construction of ${buildingDef.name} has begun! (${buildingDef.costs.labor_days} days)`);
+    
+    // Assign workers
+    this.assignConstructionWorkers(project);
+}
+
+// Assign workers to construction
+assignConstructionWorkers(project) {
+    const availableWorkers = this.gameState.characters.filter(char => 
+        char.stats.health > 30 && 
+        !char.currentActivity.includes('construction') &&
+        char.currentActivity !== 'bedridden'
+    );
+    
+    const workersNeeded = Math.min(3, availableWorkers.length);
+    const selectedWorkers = window.FrontierUtils.Random.choices(availableWorkers, workersNeeded);
+    
+    selectedWorkers.forEach(worker => {
+        worker.currentActivity = 'building_construction';
+        project.workers.push(worker.id);
+    });
+    
+    if (selectedWorkers.length > 0) {
+        this.logGameEvent(`${selectedWorkers.map(w => w.name).join(', ')} assigned to construction`);
+    }
+}
+
+// Process ongoing construction
+processConstructionProjects() {
+    this.gameState.infrastructure.construction_projects.forEach((project, index) => {
+        project.daysRemaining--;
+        
+        // Calculate daily progress based on workers
+        const activeWorkers = project.workers.filter(workerId => {
+            const worker = this.gameState.characters.find(c => c.id === workerId);
+            return worker && worker.currentActivity === 'building_construction' && worker.stats.health > 20;
+        });
+        
+        // Progress bonus for skilled workers
+        let progressBonus = 0;
+        activeWorkers.forEach(workerId => {
+            const worker = this.gameState.characters.find(c => c.id === workerId);
+            if (worker) {
+                progressBonus += Math.floor(worker.stats.skills.construction / 100);
+            }
+        });
+        
+        project.daysRemaining -= progressBonus;
+        
+        // Construction complete
+        if (project.daysRemaining <= 0) {
+            this.completeConstruction(project);
+            this.gameState.infrastructure.construction_projects.splice(index, 1);
+        }
+    });
+}
+
+// Complete building construction
+completeConstruction(project) {
+    const building = {
+        name: project.building.name,
+        type: project.building.type,
+        capacity: project.building.capacity,
+        condition: 100,
+        constructionDate: new Date(this.gameState.date),
+        benefits: project.building.benefits
+    };
+    
+    this.gameState.infrastructure.buildings.push(building);
+    
+    // Free up workers
+    project.workers.forEach(workerId => {
+        const worker = this.gameState.characters.find(c => c.id === workerId);
+        if (worker) {
+            worker.currentActivity = 'celebrating_completion';
+        }
+    });
+    
+    // Apply building benefits
+    this.applyBuildingBenefits(building);
+    
+    // Morale boost from completion
+    this.gameState.morale.overall = Math.min(100, this.gameState.morale.overall + 10);
+    
+    this.logGameEvent(`🏗️ ${building.name} construction completed! The settlement celebrates.`);
+    
+    // Create chronicle event
+    this.chronicle.push({
+        date: new Date(this.gameState.date),
+        type: 'construction',
+        description: `The ${building.name} was completed, marking a milestone in the settlement's development`,
+        participants: project.workers.map(id => this.gameState.characters.find(c => c.id === id)?.name).filter(Boolean),
+        severity: 5
+    });
+}
+
+// Helper methods
+needsWeatherProtection() {
+    return this.gameState.weather.temperature < 0 || 
+           this.gameState.weather.precipitation !== 'none' ||
+           this.gameState.infrastructure.buildings.length === 0;
+}
+
+getTotalResources() {
+    return Object.values(this.gameState.resources).reduce((sum, val) => sum + val, 0);
+}
+
+hasWaterScarcity() {
+    return this.gameState.resources.water < this.gameState.population.total * 5;
+}
+
+hasCharacterWithBackground(background) {
+    return this.gameState.characters.some(char => char.background === background && char.stats.health > 30);
+}
+
+checkResourceScarcity() {
+    const population = this.gameState.population.total;
+    const resources = this.gameState.resources;
+    
+    // Food scarcity warnings
+    if (resources.food < population * 3) {
+        this.gameState.morale.recent_events.push('food_shortage_concern');
+    }
+    
+    // Tool shortage effects
+    if (resources.tools === 0) {
+        this.gameState.characters.forEach(char => {
+            if (['farming', 'construction', 'mining'].includes(char.currentActivity)) {
+                char.currentActivity = 'looking_for_tools';
+                char.stats.mood -= 5;
+            }
+        });
+    }
+    
+    // Water crisis
+    if (resources.water < population) {
+        this.gameState.morale.overall = Math.max(0, this.gameState.morale.overall - 10);
+        this.logGameEvent('Water crisis! The settlement desperately needs a reliable water source.');
+    }
+}
+
+applyBuildingBenefits(building) {
+    building.benefits.forEach(benefit => {
+        switch (benefit) {
+            case 'water_generation_10':
+                // Well provides daily water
+                setInterval(() => {
+                    if (building.condition > 50) {
+                        this.gameState.resources.water += 10;
+                    }
+                }, 24 * 60 * 60 * 1000); // Daily
+                break;
+                
+            case 'morale_boost_5':
+                this.gameState.morale.overall = Math.min(100, this.gameState.morale.overall + 5);
+                break;
+                
+            case 'morale_boost_10':
+                this.gameState.morale.overall = Math.min(100, this.gameState.morale.overall + 10);
+                break;
+                
+            case 'morale_boost_15':
+                this.gameState.morale.overall = Math.min(100, this.gameState.morale.overall + 15);
+                break;
+        }
+    });
+}
+
+logGameEvent(message) {
+    const timestamp = window.FrontierUtils.DateUtils.formatDate(this.gameState.date);
+    console.log(`🏔️ [${timestamp}] ${message}`);
+}
     // Rest of the simulation methods (start, stop, step, etc.)
     // Add these methods to your FrontierSimulation class
 
