@@ -856,7 +856,8 @@ class FrontierSimulation {
     processed = processed.replace(/{legendary_creature}/g, window.FrontierUtils.Random.choice(['Windigo', 'Thunderbird', 'Desert Spirit', 'Canyon Ghost', 'Shadow Walker']));
     processed = processed.replace(/{inventor}/g, this.getRandomCharacterName());
     processed = processed.replace(/{purpose}/g, window.FrontierUtils.Random.choice(['mining efficiency', 'water pumping', 'grain processing', 'construction aid', 'transportation']));
-    
+    // Add this line to processTemplate() method:
+    processed = processed.replace(/{river_name}/g, window.FrontierUtils.Random.choice(['Whiskey Creek', 'Red Rock River', 'Bloodmarsh Stream', 'Silver Fork']));
     return processed;
 }
 
