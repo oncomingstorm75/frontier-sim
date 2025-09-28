@@ -429,28 +429,22 @@ class FrontierSimulation {
         
         // Fallback based on background name
         const backgroundActivities = {
-            'Farmer': ['farming', 'tending crops', 'preparing soil', 'harvesting'],
-            'Prospector': ['mining', 'prospecting', 'panning gold', 'exploring'],
-            'Merchant': ['trading', 'negotiating', 'inventory management', 'customer relations'],
-            'Carpenter': ['woodworking', 'construction', 'tool maintenance', 'furniture making'],
-            'Hunter': ['hunting', 'tracking', 'preparing meat', 'scouting'],
-            'Doctor': ['treating patients', 'preparing medicine', 'health inspections'],
-            'Blacksmith': ['metalworking', 'tool forging', 'horseshoeing', 'repairs'],
-            'Preacher': ['leading services', 'counseling', 'community organizing'],
-            'Sheriff': ['patrolling', 'maintaining order', 'investigating', 'training'],
-            'Saloon Keeper': ['serving customers', 'entertainment', 'managing establishment'],
-            'Rancher': ['herding cattle', 'maintaining fences', 'breaking horses'],
-            'Trapper': ['setting traps', 'hunting game', 'processing pelts'],
-            'Scout': ['scouting routes', 'gathering intelligence', 'guiding travelers'],
-            'Teacher': ['teaching children', 'preparing lessons', 'community lectures']
-            'Farmer': ['farming', 'tending crops', 'preparing soil', 'harvesting'],
-            'Prospector': ['mining', 'prospecting', 'panning gold', 'exploring'],
-            'Merchant': ['trading', 'negotiating', 'inventory management', 'customer relations'],
-            'Carpenter': ['woodworking', 'construction', 'tool maintenance', 'furniture making'],
-            'Blacksmith': ['metalworking', 'tool forging', 'horseshoeing', 'repairs'], // Tool production
-            'Doctor': ['treating patients', 'preparing medicine', 'health inspections'], // Medicine production
-            'Stonemason': ['quarrying', 'stonework', 'construction', 'masonry'], // Stone production
-    // ... existing activities
+    'Farmer': ['farming', 'tending crops', 'preparing soil', 'harvesting'],
+    'Prospector': ['mining', 'prospecting', 'panning gold', 'exploring'],
+    'Merchant': ['trading', 'negotiating', 'inventory management', 'customer relations'],
+    'Carpenter': ['woodworking', 'construction', 'tool maintenance', 'furniture making'],
+    'Hunter': ['hunting', 'tracking', 'preparing meat', 'scouting'],
+    'Doctor': ['treating patients', 'preparing medicine', 'health inspections'],
+    'Blacksmith': ['metalworking', 'tool forging', 'horseshoeing', 'repairs'],
+    'Preacher': ['leading services', 'counseling', 'community organizing'],
+    'Sheriff': ['patrolling', 'maintaining order', 'investigating', 'training'],
+    'Saloon Keeper': ['serving customers', 'entertainment', 'managing establishment'],
+    'Rancher': ['herding cattle', 'maintaining fences', 'breaking horses'],
+    'Trapper': ['setting traps', 'hunting game', 'processing pelts'],
+    'Scout': ['scouting routes', 'gathering intelligence', 'guiding travelers'],
+    'Teacher': ['teaching children', 'preparing lessons', 'community lectures'],
+    'Stonemason': ['quarrying', 'stonework', 'construction', 'masonry']
+    // ... add more if needed
 };
         };
         
