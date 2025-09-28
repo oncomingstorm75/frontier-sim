@@ -117,28 +117,28 @@ class FrontierUI {
             this.elements.exportBtn.addEventListener('click', () => this.exportChronicle());
         }
         if (document.getElementById('stepYearBtn')) {
-    document.getElementById('stepYearBtn').addEventListener('click', () => {
-        if (this.simulation && !this.simulation.isRunning) {
-            this.advanceWithProgress(365, "Advancing 1 year...");
+            document.getElementById('stepYearBtn').addEventListener('click', () => {
+                if (this.simulation && !this.simulation.isRunning) {
+                    this.advanceWithProgress(365, "Advancing 1 year...");
+                }
+            });
         }
-    });
-}
 
-if (document.getElementById('step5YearBtn')) {
-    document.getElementById('step5YearBtn').addEventListener('click', () => {
-        if (this.simulation && !this.simulation.isRunning) {
-            this.advanceWithProgress(1825, "Advancing 5 years...");
+        if (document.getElementById('step5YearBtn')) {
+            document.getElementById('step5YearBtn').addEventListener('click', () => {
+                if (this.simulation && !this.simulation.isRunning) {
+                    this.advanceWithProgress(1825, "Advancing 5 years...");
+                }
+            });
         }
-    });
-}
 
-if (document.getElementById('step10YearBtn')) {
-    document.getElementById('step10YearBtn').addEventListener('click', () => {
-        if (this.simulation && !this.simulation.isRunning) {
-            this.advanceWithProgress(3650, "Advancing 10 years...");
+        if (document.getElementById('step10YearBtn')) {
+            document.getElementById('step10YearBtn').addEventListener('click', () => {
+                if (this.simulation && !this.simulation.isRunning) {
+                    this.advanceWithProgress(3650, "Advancing 10 years...");
+                }
+            });
         }
-    });
-}
         // Speed control
         if (this.elements.speedSlider) {
             this.elements.speedSlider.addEventListener('input', (e) => {
@@ -148,35 +148,35 @@ if (document.getElementById('step10YearBtn')) {
         }
         // Add to setupEventListeners() method
 
-if (document.getElementById('stepWeekBtn')) {
-    document.getElementById('stepWeekBtn').addEventListener('click', () => {
-        if (this.simulation) {
-            this.simulation.stepDays(7);
-            this.updateDisplay();
+        if (document.getElementById('stepWeekBtn')) {
+            document.getElementById('stepWeekBtn').addEventListener('click', () => {
+                if (this.simulation) {
+                    this.simulation.stepDays(7);
+                    this.updateDisplay();
+                }
+            });
         }
-    });
-}
 
-if (document.getElementById('stepMonthBtn')) {
-    document.getElementById('stepMonthBtn').addEventListener('click', () => {
-        if (this.simulation) {
-            this.simulation.stepDays(30);
-            this.updateDisplay();
+        if (document.getElementById('stepMonthBtn')) {
+            document.getElementById('stepMonthBtn').addEventListener('click', () => {
+                if (this.simulation) {
+                    this.simulation.stepDays(30);
+                    this.updateDisplay();
+                }
+            });
         }
-    });
-}
 
-if (document.getElementById('stepSeasonBtn')) {
-    document.getElementById('stepSeasonBtn').addEventListener('click', () => {
-        if (this.simulation) {
-            const seasons = ['spring', 'summer', 'fall', 'winter'];
-            const currentIndex = seasons.indexOf(this.simulation.gameState.season);
-            const nextSeason = seasons[(currentIndex + 1) % 4];
-            this.simulation.stepToSeason(nextSeason);
-            this.updateDisplay();
+        if (document.getElementById('stepSeasonBtn')) {
+            document.getElementById('stepSeasonBtn').addEventListener('click', () => {
+                if (this.simulation) {
+                    const seasons = ['spring', 'summer', 'fall', 'winter'];
+                    const currentIndex = seasons.indexOf(this.simulation.gameState.season);
+                    const nextSeason = seasons[(currentIndex + 1) % 4];
+                    this.simulation.stepToSeason(nextSeason);
+                    this.updateDisplay();
+                }
+            });
         }
-    });
-}
         // Character list interactions
         if (this.elements.characterList) {
             this.elements.characterList.addEventListener('click', (e) => {
@@ -193,6 +193,26 @@ if (document.getElementById('stepSeasonBtn')) {
                 const eventItem = e.target.closest('.event-item');
                 if (eventItem) {
                     this.showEventDetails(eventItem.dataset.eventId);
+                }
+            });
+        }
+
+        if (document.getElementById('customAdvanceBtn')) {
+            document.getElementById('customAdvanceBtn').addEventListener('click', () => {
+                const days = parseInt(document.getElementById('customDays').value);
+                if (days && days > 0 && days <= 10000) {
+                    this.advanceWithProgress(days, `Advancing ${days} Days...`);
+                } else {
+                    this.setStatus('Enter a valid number of days (1-10000)', 'warning');
+                }
+            });
+        }
+
+        // Allow Enter key in custom days input
+        if (document.getElementById('customDays')) {
+            document.getElementById('customDays').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('customAdvanceBtn').click();
                 }
             });
         }
@@ -273,26 +293,6 @@ if (document.getElementById('stepSeasonBtn')) {
         }
     }
     
-if (document.getElementById('customAdvanceBtn')) {
-    document.getElementById('customAdvanceBtn').addEventListener('click', () => {
-        const days = parseInt(document.getElementById('customDays').value);
-        if (days && days > 0 && days <= 10000) {
-            this.advanceWithProgress(days, `Advancing ${days} Days...`);
-        } else {
-            this.setStatus('Enter a valid number of days (1-10000)', 'warning');
-        }
-    });
-}
-
-// Allow Enter key in custom days input
-if (document.getElementById('customDays')) {
-    document.getElementById('customDays').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            document.getElementById('customAdvanceBtn').click();
-        }
-    });
-}
-
     // Display Update Methods
     updateDisplay() {
         if (!this.simulation || !this.simulation.gameState) return;
@@ -725,61 +725,63 @@ if (document.getElementById('customDays')) {
         this.simulation = null;
         this.elements = {};
     }
-}
-// Enhanced showModal method in FrontierUI class
+
+    // Enhanced showModal method in FrontierUI class
     showModal(title, content, options = {}) {
-    const {
-        allowClose = true,
-        modalId = 'dynamicModal',
-        size = 'modal-lg',
-        backdrop = true,
-        keyboard = true
-    } = options;
-    
-    // Create or get existing modal
-    let modal = document.getElementById(modalId);
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = modalId;
-        modal.className = 'modal fade';
-        modal.innerHTML = `
-            <div class="modal-dialog ${size}">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="${modalId}Title"></h5>
-                        ${allowClose ? '<button type="button" class="btn-close" data-bs-dismiss="modal"></button>' : ''}
-                    </div>
-                    <div class="modal-body" id="${modalId}Body"></div>
-                    <div class="modal-footer" id="${modalId}Footer" style="display: none;">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        const {
+            allowClose = true,
+            modalId = 'dynamicModal',
+            size = 'modal-lg',
+            backdrop = true,
+            keyboard = true
+        } = options;
+        
+        // Create or get existing modal
+        let modal = document.getElementById(modalId);
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = modalId;
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+                <div class="modal-dialog ${size}">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="${modalId}Title"></h5>
+                            ${allowClose ? '<button type="button" class="btn-close" data-bs-dismiss="modal"></button>' : ''}
+                        </div>
+                        <div class="modal-body" id="${modalId}Body"></div>
+                        <div class="modal-footer" id="${modalId}Footer" style="display: none;">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        // Update modal content
+        document.getElementById(`${modalId}Title`).textContent = title;
+        document.getElementById(`${modalId}Body`).innerHTML = content;
+        
+        // Show/hide footer
+        const footer = document.getElementById(`${modalId}Footer`);
+        if (allowClose) {
+            footer.style.display = 'flex';
+        } else {
+            footer.style.display = 'none';
+        }
+        
+        // Configure modal options
+        const bootstrapModal = new bootstrap.Modal(modal, {
+            backdrop: backdrop,
+            keyboard: keyboard
+        });
+        
+        bootstrapModal.show();
+        return bootstrapModal;
     }
-    
-    // Update modal content
-    document.getElementById(`${modalId}Title`).textContent = title;
-    document.getElementById(`${modalId}Body`).innerHTML = content;
-    
-    // Show/hide footer
-    const footer = document.getElementById(`${modalId}Footer`);
-    if (allowClose) {
-        footer.style.display = 'flex';
-    } else {
-        footer.style.display = 'none';
-    }
-    
-    // Configure modal options
-    const bootstrapModal = new bootstrap.Modal(modal, {
-        backdrop: backdrop,
-        keyboard: keyboard
-    });
-    
-    bootstrapModal.show();
-    return bootstrapModal;
 }
+
 // Initialize UI when DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
     window.frontierUI = new FrontierUI();
@@ -789,12 +791,4 @@ window.addEventListener('DOMContentLoaded', () => {
 // Export for module systems
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = FrontierUI;
-
 }
-
-
-
-
-
-
-
