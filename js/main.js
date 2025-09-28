@@ -947,19 +947,109 @@ class FrontierSimulation {
     // Add these methods to your FrontierSimulation class
 
 // Step forward multiple days
-stepDays(numDays) {
-    if (this.isRunning) {
-        console.log('Cannot step while simulation is running. Stop first.');
-        return;
+// Enhanced stepDays method with safety checks and progress callbacks
+stepDays(numDays, options = {}) {
+    const {
+        maxDays = 10000,
+        skipValidation = false,
+        progressCallback = null,
+        errorCallback = null
+    } = options;
+    
+    // Safety checks
+    if (!skipValidation) {
+        if (this.isRunning) {
+            console.log('Cannot step while simulation is running. Stop first.');
+            if (errorCallback) errorCallback('Simulation is running');
+            return false;
+        }
+        
+        if (numDays <= 0) {
+            console.log('Invalid number of days. Must be positive.');
+            if (errorCallback) errorCallback('Invalid day count');
+            return false;
+        }
+        
+        if (numDays > maxDays) {
+            console.log(`Cannot advance more than ${maxDays} days at once for safety.`);
+            if (errorCallback) errorCallback(`Exceeds maximum of ${maxDays} days`);
+            return false;
+        }
     }
     
-    console.log(`Advancing ${numDays} days...`);
-    for (let i = 0; i < numDays; i++) {
-        this.simulationStep();
+    console.log(`🚀 Advancing ${numDays} days...`);
+    const startTime = performance.now();
+    const startDate = new Date(this.gameState.date);
+    
+    try {
+        // Memory management for long simulations
+        const shouldOptimize = numDays > 365;
+        
+        for (let i = 0; i < numDays; i++) {
+            this.simulationStep();
+            
+            // Progress callback every 10 days or 1% of total, whichever is less
+            const progressInterval = Math.max(1, Math.min(10, Math.floor(numDays / 100)));
+            if (progressCallback && i % progressInterval === 0) {
+                progressCallback(i + 1, numDays, {
+                    currentDate: new Date(this.gameState.date),
+                    population: this.gameState.population.total,
+                    morale: this.gameState.morale.overall
+                });
+            }
+            
+            // Memory management for very long simulations
+            if (shouldOptimize && i % 100 === 0) {
+                this.optimizeMemoryUsage();
+            }
+        }
+        
+        const endTime = performance.now();
+        const endDate = new Date(this.gameState.date);
+        
+        console.log(`✅ Advanced ${numDays} days in ${Math.round(endTime - startTime)}ms`);
+        console.log(`📅 ${window.FrontierUtils.DateUtils.formatDate(startDate)} → ${window.FrontierUtils.DateUtils.formatDate(endDate)}`);
+        
+        // Final progress callback
+        if (progressCallback) {
+            progressCallback(numDays, numDays, {
+                currentDate: endDate,
+                population: this.gameState.population.total,
+                morale: this.gameState.morale.overall,
+                completed: true
+            });
+        }
+        
+        return true;
+        
+    } catch (error) {
+        console.error('Error during time advancement:', error);
+        if (errorCallback) errorCallback(error.message);
+        return false;
     }
-    console.log(`Advanced ${numDays} days. Current date: ${this.utils.DateUtils.formatDate(this.gameState.date)}`);
 }
-
+    // Memory optimization for long simulations
+optimizeMemoryUsage() {
+    // Keep only last 100 chronicle entries during long simulations
+    if (this.chronicle.length > 200) {
+        this.chronicle = this.chronicle.slice(-100);
+    }
+    
+    // Keep only last 30 days of weather history
+    if (this.weatherSystem && this.weatherSystem.weatherHistory.length > 50) {
+        this.weatherSystem.weatherHistory = this.weatherSystem.weatherHistory.slice(-30);
+    }
+    
+    // Clean up old medical history
+    this.gameState.characters.forEach(character => {
+        if (character.medicalHistory && character.medicalHistory.length > 20) {
+            character.medicalHistory = character.medicalHistory.slice(-10);
+        }
+        if (character.activityHistory && character.activityHistory.length > 30) {
+            character.activityHistory = character.activityHistory.slice(-15);
+        }
+    });
+}
 // Step to a specific season
 stepToSeason(targetSeason) {
     if (this.isRunning) {
